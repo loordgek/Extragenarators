@@ -11,7 +11,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.reflect.Field;
-
+/*
+*    PneumaticCraft code. author = MineMaarten
+*    https://github.com/MineMaarten/PneumaticCraft
+*/
 public abstract class SyncField<T> {
     private final Field field;
     private final Object te;

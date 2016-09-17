@@ -3,7 +3,10 @@ package loordgek.extragenarators.network;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.List;
-
+/*
+*    PneumaticCraft code. author = MineMaarten
+*    https://github.com/MineMaarten/PneumaticCraft
+*/
 public interface IDescSync {
 
     public static enum Type{

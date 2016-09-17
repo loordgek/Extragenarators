@@ -11,7 +11,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+*    PneumaticCraft code. author = MineMaarten
+*    https://github.com/MineMaarten/PneumaticCraft
+*/
 public abstract class ContainerExtragenarators<Tile extends TileGenBase> extends Container {
     public Tile te;
 

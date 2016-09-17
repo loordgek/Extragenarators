@@ -9,7 +9,10 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
-
+/*
+*    PneumaticCraft code. author = MineMaarten
+*    https://github.com/MineMaarten/PneumaticCraft
+*/
 public class GuiSyncPacket extends AbstractPacket<GuiSyncPacket> {
     private int syncId;
     private Object value;

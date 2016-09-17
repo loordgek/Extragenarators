@@ -6,7 +6,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
-
+/*
+*    PneumaticCraft code. author = MineMaarten
+*    https://github.com/MineMaarten/PneumaticCraft
+*/
 public abstract class AbstractPacket <REQ extends IMessage> implements IMessage ,IMessageHandler<REQ, REQ> {
 
     @Override

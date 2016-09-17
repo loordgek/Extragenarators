@@ -9,7 +9,10 @@ import net.minecraftforge.fluids.FluidTank;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+*    PneumaticCraft code. author = MineMaarten
+*    https://github.com/MineMaarten/PneumaticCraft
+*/
 public class NetworkUtils{
 
     /*private static Map<Class, List<Field>> extraMarkedFields = new HashMap<Class, List<Field>>();
