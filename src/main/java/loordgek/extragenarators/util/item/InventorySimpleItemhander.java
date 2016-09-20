@@ -1,14 +1,16 @@
 package loordgek.extragenarators.util.item;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
 import loordgek.extragenarators.enums.EnumInvFlow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-import javax.annotation.Nullable;
-
-public class InventorySimpleItemhander implements IItemHandler {
+public class InventorySimpleItemhander implements IItemHandler, IItemHandlerModifiable, INBTSerializable<NBTTagCompound> {
 
 
     private final int stacksize;
@@ -51,8 +53,9 @@ public class InventorySimpleItemhander implements IItemHandler {
                 if (!simulate){
                     ItemStack copy = stack.copy();
                     copy.stackSize += stackinslot.stackSize;
-                    setInventorySlotContents(slot, stack);
-                    onwer.OnInventoryChange(stack,slot,name, EnumInvFlow.INSERT);
+                    stacks[slot] = stack;
+                    onwer.OnInventoryChanged(stack,slot,name, EnumInvFlow.INSERT);
+                    onwer.markDirty();
                 }
                 return null;
 
@@ -62,8 +65,9 @@ public class InventorySimpleItemhander implements IItemHandler {
                 if (!simulate){
                     ItemStack copy = stack.splitStack(m);
                     copy.stackSize += stackinslot.stackSize;
-                    setInventorySlotContents(slot, stack);
-                    onwer.OnInventoryChange(stack,slot,name, EnumInvFlow.INSERT);
+                    stacks[slot] = stack;
+                    onwer.OnInventoryChanged(stack,slot,name, EnumInvFlow.INSERT);
+                    onwer.markDirty();
                     }
             }
         }
@@ -72,8 +76,9 @@ public class InventorySimpleItemhander implements IItemHandler {
             if (m < stack.stackSize) {
                 stack = stack.copy();
                 if (!simulate) {
-                    setInventorySlotContents(slot, stack);
-                    onwer.OnInventoryChange(stack,slot,name, EnumInvFlow.INSERT);
+                    stacks[slot] = stack;
+                    onwer.OnInventoryChanged(stack,slot,name, EnumInvFlow.INSERT);
+                    onwer.markDirty();
                     return stack;
                 }
                 else {
@@ -83,8 +88,9 @@ public class InventorySimpleItemhander implements IItemHandler {
             }
             else {
                 if (!simulate) {
-                    setInventorySlotContents(slot, stack);
-                    onwer.OnInventoryChange(stack,slot,name, EnumInvFlow.INSERT);
+                    stacks[slot] = stack;
+                    onwer.OnInventoryChanged(stack,slot,name, EnumInvFlow.INSERT);
+                    onwer.markDirty();
                 }
                 return null;
             }
@@ -113,7 +119,8 @@ public class InventorySimpleItemhander implements IItemHandler {
             int m = Math.min(stackInSlot.stackSize, amount);
 
             ItemStack decrStackSize = decrStackSize(slot, amount);
-            onwer.OnInventoryChange(decrStackSize ,slot ,name ,EnumInvFlow.EXTRAXT);
+            onwer.OnInventoryChanged(decrStackSize ,slot ,name ,EnumInvFlow.EXTRAXT);
+            onwer.markDirty();
             return decrStackSize;
         }
 
@@ -135,16 +142,53 @@ public class InventorySimpleItemhander implements IItemHandler {
         }
 
     }
-    public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {
-        if (slot >= stacks.length) {
-            return;
-        }
-        stacks[slot] = stack;
 
-        if (stack != null && stack.stackSize > stacksize) {
-            stack.stackSize = stacksize;
+    @Override
+    public NBTTagCompound serializeNBT()
+    {
+        NBTTagList nbtTagList = new NBTTagList();
+        for (int i = 0; i < stacks.length; i++)
+        {
+            if (stacks[i] != null)
+            {
+                NBTTagCompound itemTag = new NBTTagCompound();
+                itemTag.setInteger("Slot", i);
+                stacks[i].writeToNBT(itemTag);
+                nbtTagList.appendTag(itemTag);
+            }
+        }
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setTag("Items", nbtTagList);
+        return nbt;
+    }
+
+    @Override
+    public void deserializeNBT(NBTTagCompound nbt)
+    {
+        NBTTagList tagList = nbt.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < tagList.tagCount(); i++)
+        {
+            NBTTagCompound itemTags = tagList.getCompoundTagAt(i);
+            int slot = itemTags.getInteger("Slot");
+
+            if (slot >= 0 && slot <= stacks.length)
+            {
+                stacks[slot] = ItemStack.loadItemStackFromNBT(itemTags);
+
+            }
         }
         onwer.markDirty();
+    }
+
+    @Override
+    public void setStackInSlot(int slot, ItemStack stack) {
+        boolean markdirty = false;
+        stacks[slot] = stack;
+        if (!markdirty){
+            onwer.markDirty();
+            markdirty = true;
+        }
+
 
     }
 }

@@ -76,7 +76,6 @@ public abstract class SyncField<T> {
         return lastValue;
     }
 
-    @SideOnly(Side.CLIENT)
     public void setValue(T value) {
         try {
             if (arrayIndex >= 0) {
@@ -128,15 +127,11 @@ public abstract class SyncField<T> {
         @Override
         protected Short getValueForArray(Object array, int index) {
             return ((short[]) array)[index];
-
-
         }
 
         @Override
         protected void setValueForArray(Object array, int index, Short value) throws Exception {
             ((short[]) array)[index] = value;
-
-
         }
     }
 
@@ -312,6 +307,18 @@ public abstract class SyncField<T> {
         @Override
         protected void setValueForArray(Object array, int index, Integer value) throws Exception {
             ((EnergyStorage[]) array)[index].receiveEnergy(value, false);
+        }
+
+        @Override
+        protected Integer retrieveValue(Field field, Object te) throws Exception {
+            EnergyStorage energyStorage = (EnergyStorage)field.get(te);
+            return energyStorage.getEnergyStored();
+        }
+
+        @Override
+        protected void injectValue(Field field, Object te, Integer value) throws Exception {
+            EnergyStorage energyStorage = (EnergyStorage)field.get(te);
+            energyStorage.receiveEnergy(value, false);
         }
     }
 }

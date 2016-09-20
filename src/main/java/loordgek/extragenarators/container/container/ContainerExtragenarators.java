@@ -54,7 +54,6 @@ public abstract class ContainerExtragenarators<Tile extends TileGenBase> extends
             }
         }
     }
-    public void Updatefield(int id , Object value){}
 
     protected void addSyncField(SyncField field){
         syncFields.add(field);
@@ -69,7 +68,7 @@ public abstract class ContainerExtragenarators<Tile extends TileGenBase> extends
 
 
 
-    public void updateField(int index, Object value){
+    public void Updatefield(int index, Object value){
         syncFields.get(index).setValue(value);
         if(te != null) te.onGuiUpdate();
     }

@@ -2,6 +2,7 @@ package loordgek.extragenarators.init;
 
 import loordgek.extragenarators.blocks.BlockGenBase;
 import loordgek.extragenarators.blocks.BlockMain;
+import loordgek.extragenarators.blocks.NBTBlock;
 import loordgek.extragenarators.items.itemblock.ItemBlockGenBase;
 import loordgek.extragenarators.items.itemblock.ItemBlockMain;
 import loordgek.extragenarators.ref.Reference;
@@ -16,9 +17,11 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class InitBlocks {
     public static final BlockMain GEN = new BlockGenBase();
     public static final ItemBlockMain GenITEM = new ItemBlockGenBase(GEN);
+    public static final BlockMain TEST = new NBTBlock();
 
     public static void Init(){
         registerBlock(GEN,GenITEM , "BlockGenBase");
+        registerBlock(TEST, null, "test");
     }
 
     private static Block registerBlock(BlockMain block, ItemBlock itemblock, String name){

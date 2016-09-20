@@ -3,7 +3,6 @@ package loordgek.extragenarators.network;
 import loordgek.extragenarators.util.LogHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidTank;
 
 import java.lang.reflect.Field;
@@ -200,7 +199,7 @@ public class NetworkUtils{
         if(field.getType().isEnum()) return new SyncField.bytefieldsync(te, field);
         if(ItemStack.class.isAssignableFrom(field.getType())) return new SyncField.ItemStackfieldsync(te, field);
         if(FluidTank.class.isAssignableFrom(field.getType())) return new SyncField.FluidStackfieldsync(te, field);
-        if(IEnergyStorage.class.isAssignableFrom(field.getType())) return new SyncField.Energyfiedsync(te, field);
+        if(EnergyStorage.class.isAssignableFrom(field.getType())) return new SyncField.Energyfiedsync(te, field);
 
         return null;
     }

@@ -9,7 +9,7 @@ public class ContainerFurnaceGen extends ContainerExtragenarators<TileFurnaceGen
     public ContainerFurnaceGen(EntityPlayer player, TileFurnaceGen te) {
         super(te);
         this.te = te;
-        addSlotToContainer(new SlotFurnaceFuel(te.invWrapper, 0, 50, 50));
+        addSlotToContainer(new SlotFurnaceFuel(te.fuelSlot, 0, 50, 50));
         addPlayerSlots(player.inventory, 80, 80);
     }
 

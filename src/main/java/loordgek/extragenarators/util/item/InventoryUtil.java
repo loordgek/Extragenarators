@@ -1,17 +1,31 @@
 package loordgek.extragenarators.util.item;
 
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.items.IItemHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class InventoryUtil {
-
+    public static ItemStack[] getStacks(IItemHandler itemHandler) {
+        ItemStack[] stacks = new ItemStack[itemHandler.getSlots()];
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            stacks[i] = itemHandler.getStackInSlot(i);
+        }
+        return stacks;
+    }
+    public static boolean IsItemHanderEmty(IItemHandler itemHandler){
+        boolean[] array = new boolean[itemHandler.getSlots()];
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            if (itemHandler.getStackInSlot(i) == null){
+                array[i] = true;
+            }
+        }
+        for (boolean anArray : array) {
+            if (!anArray)
+                return true;
+        }
+        return false;
+    }
+/*
     public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, boolean oreDictionary, boolean doRemove) {
         ItemStack[] stock = getStacks(inventory);
 
@@ -50,10 +64,10 @@ public class InventoryUtil {
         return removed;
     }
 
-    public static ItemStack[] getStacks(IInventory inventory) {
-        ItemStack[] stacks = new ItemStack[inventory.getSizeInventory()];
-        for (int i = 0; i < inventory.getSizeInventory(); i++) {
-            stacks[i] = inventory.getStackInSlot(i);
+    public static ItemStack[] getStacks(IItemHandler itemHandler) {
+        ItemStack[] stacks = new ItemStack[itemHandler.getSlots()];
+        for (int i = 0; i < itemHandler.getSlots(); i++) {
+            stacks[i] = itemHandler.getStackInSlot(i);
         }
         return stacks;
     }
@@ -150,7 +164,7 @@ public class InventoryUtil {
             }
         }
         return numberofitems;
-    }
+    }*/
     public static boolean isBucket(ItemStack stack)
     {
         return stack != null && stack.getItem() != null && stack.getItem() == Items.BUCKET;

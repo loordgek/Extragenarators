@@ -1,18 +1,17 @@
 package loordgek.extragenarators.tile;
 
-import loordgek.extragenarators.util.LogHelper;
-import loordgek.extragenarators.util.item.InventorySimpleIinv;
+import loordgek.extragenarators.enums.EnumInvFlow;
+import loordgek.extragenarators.util.item.InventorySimpleItemhander;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class TileFurnaceGen extends TileGenBase implements ITickable {
-    private InventorySimpleIinv inventorySimpleIinv = new InventorySimpleIinv("upgrade_inv", 64, 1, this);
-    public InvWrapper invWrapper = new InvWrapper(inventorySimpleIinv);
+    public InventorySimpleItemhander fuelSlot = new InventorySimpleItemhander(64, 1, "FuelSlot", this);
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
@@ -22,13 +21,27 @@ public class TileFurnaceGen extends TileGenBase implements ITickable {
     @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-            return  CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(invWrapper);
+            return  CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(fuelSlot);
 
         return super.getCapability(capability, facing);
     }
 
     public ItemStack getStack(){
-        return invWrapper.getStackInSlot(0);
+        return fuelSlot.getStackInSlot(0);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        fuelSlot.deserializeNBT(compound.getCompoundTag("FuelSlot"));
+
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        super.writeToNBT(compound);
+        compound.setTag("FuelSlot", fuelSlot.serializeNBT());
+        return compound;
     }
 
     @Override
@@ -41,7 +54,7 @@ public class TileFurnaceGen extends TileGenBase implements ITickable {
                         if(TileEntityFurnace.isItemFuel(getStack())) {
                                 burntime = TileEntityFurnace.getItemBurnTime(getStack());
                                 currentburntime = TileEntityFurnace.getItemBurnTime(getStack());
-                                invWrapper.extractItem(0, 1, false);
+                                fuelSlot.extractItem(0, 1, false);
                         }
                     }
                 }
@@ -56,5 +69,10 @@ public class TileFurnaceGen extends TileGenBase implements ITickable {
                 }
             }
         }
+    }
+
+    @Override
+    public void OnInventoryChanged(ItemStack stack, int slot, String name, EnumInvFlow flow) {
+
     }
 }

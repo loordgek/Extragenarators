@@ -8,6 +8,10 @@ import java.lang.annotation.Target;
 *    PneumaticCraft code. author = MineMaarten
 *    https://github.com/MineMaarten/PneumaticCraft
 */
+
+/**
+ * Any array fields annotated with this will only sync the specified indexes.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface FilteredSync {

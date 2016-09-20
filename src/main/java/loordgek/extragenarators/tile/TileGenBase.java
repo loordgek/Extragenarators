@@ -1,12 +1,13 @@
 package loordgek.extragenarators.tile;
 
 import loordgek.extragenarators.api.IUpgradeItem;
+import loordgek.extragenarators.enums.EnumInvFlow;
 import loordgek.extragenarators.network.*;
 import loordgek.extragenarators.util.UpgradeUtil;
-import loordgek.extragenarators.util.item.IInventoryOnwerIinv;
-import loordgek.extragenarators.util.item.InventorySimpleIinv;
+import loordgek.extragenarators.util.item.IInventoryOnwer;
+import loordgek.extragenarators.util.item.InventorySimpleItemhander;
 import loordgek.extragenarators.util.item.InventoryUtil;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -17,7 +18,7 @@ import net.minecraftforge.energy.EnergyStorage;
 
 import java.util.List;
 
-public class TileGenBase extends TileEntity implements IInventoryOnwerIinv, IDescSync{
+public class TileGenBase extends TileEntity implements IInventoryOnwer, IDescSync{
 
     @GuiSync public int maxpowercapacity = 1000000;
     @GuiSync public int upgradepowercapacity;
@@ -30,28 +31,19 @@ public class TileGenBase extends TileEntity implements IInventoryOnwerIinv, IDes
     private List<SyncField> descriptionFields;
     @GuiSync public EnergyStorage energyStorage = new EnergyStorage(maxpowercapacity);
 
-    public InventorySimpleIinv upgradeinv = new InventorySimpleIinv("upgrade",64,8,this );
+    public InventorySimpleItemhander upgradeinv = new InventorySimpleItemhander(64, 1,"upgrade",this);
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
-        upgradeinv.writeToNBT(compound);
+        upgradeinv.deserializeNBT(compound);
         return compound;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
-        upgradeinv.readFromNBT(compound);
-    }
-
-    @Override
-    public void onInventoryChanged(IInventory inventoryowner) {
-        markDirty();
-        if (inventoryowner.getName().equals("upgrade")){
-            ReCalculateUpgrade();
-        }
-
+        upgradeinv.serializeNBT();
     }
 
     private void ReCalculateUpgrade(){
@@ -129,6 +121,18 @@ public class TileGenBase extends TileEntity implements IInventoryOnwerIinv, IDes
             return CapabilityEnergy.ENERGY.cast(energyStorage);
         }
         return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public void OnInventoryChanged(ItemStack stack, int slot, String name, EnumInvFlow flow) {
+        if (name.equals("upgrade"))
+            ReCalculateUpgrade();
+
+    }
+
+    @Override
+    public void markDirty() {
+        super.markDirty();
     }
 }
 

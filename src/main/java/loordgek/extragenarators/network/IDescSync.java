@@ -9,7 +9,7 @@ import java.util.List;
 */
 public interface IDescSync {
 
-    public static enum Type{
+    enum Type{
         TILE_ENTITY, SEMI_BLOCK;
     }
     Type getSyncType();

@@ -5,7 +5,7 @@ import loordgek.extragenarators.container.container.ContainerExtragenarators;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -114,7 +114,7 @@ public class GuiSyncPacket extends AbstractPacket<GuiSyncPacket> {
                    ByteBufUtils.writeTag(buf, stack.tag);
                }break;
            case 10:
-               IEnergyStorage storage = (IEnergyStorage)value;
+               EnergyStorage storage = (EnergyStorage) value;
                buf.writeInt(storage.getEnergyStored());
                break;
         }
