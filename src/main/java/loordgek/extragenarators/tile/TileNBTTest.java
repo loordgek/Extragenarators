@@ -65,8 +65,8 @@ public class TileNBTTest extends TileEntity implements IInventoryOnwer, ITickabl
         return compound;
     }
 
-    private void addFields(Object annotatedObject){
-        this.fieldList = NBTUtil.GetFields(annotatedObject, NBTSave.class);
+    private void addFields(Object annotatedObject ,Object endobj){
+        this.fieldList = NBTUtil.GetFields(annotatedObject, endobj, NBTSave.class);
     }
 
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack){
@@ -77,8 +77,13 @@ public class TileNBTTest extends TileEntity implements IInventoryOnwer, ITickabl
 
     @Override
     public void onLoad() {
-        addFields(this);
+
         if (!worldObj.isRemote){
+            Class masterclazzz = null;
+            if (worldObj.getTileEntity(pos).getClass() != null){
+                masterclazzz = worldObj.getTileEntity(pos).getClass();
+            }
+            addFields(this, masterclazzz);
             LogHelper.info("load");
             LogHelper.info(fieldList);
 
