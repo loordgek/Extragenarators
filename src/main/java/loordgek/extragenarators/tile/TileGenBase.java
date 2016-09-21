@@ -2,49 +2,34 @@ package loordgek.extragenarators.tile;
 
 import loordgek.extragenarators.api.IUpgradeItem;
 import loordgek.extragenarators.enums.EnumInvFlow;
-import loordgek.extragenarators.network.*;
+import loordgek.extragenarators.nbt.NBTSave;
+import loordgek.extragenarators.network.GuiSync;
 import loordgek.extragenarators.util.UpgradeUtil;
 import loordgek.extragenarators.util.item.IInventoryOnwer;
 import loordgek.extragenarators.util.item.InventorySimpleItemhander;
 import loordgek.extragenarators.util.item.InventoryUtil;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 
-import java.util.List;
+public class TileGenBase extends TileMain implements IInventoryOnwer {
 
-public class TileGenBase extends TileEntity implements IInventoryOnwer, IDescSync{
 
-    @GuiSync public int maxpowercapacity = 1000000;
-    @GuiSync public int upgradepowercapacity;
-    @GuiSync public int upgrademultiplier;
-    @GuiSync public int upgradespeed;
-    @GuiSync public int burntime;
-    @GuiSync public int currentburntime;
+    @NBTSave @GuiSync public int maxpowercapacity = 1000000;
+    @NBTSave @GuiSync public int upgradepowercapacity;
+    @NBTSave @GuiSync public int upgrademultiplier;
+    @NBTSave @GuiSync public int upgradespeed;
+    @NBTSave @GuiSync public int burntime;
+    @NBTSave @GuiSync public int currentburntime;
     @GuiSync public boolean isburing;
     public int forgepower = 10;
-    private List<SyncField> descriptionFields;
-    @GuiSync public EnergyStorage energyStorage = new EnergyStorage(maxpowercapacity);
 
-    public InventorySimpleItemhander upgradeinv = new InventorySimpleItemhander(64, 1,"upgrade",this);
+    @NBTSave @GuiSync public EnergyStorage energyStorage = new EnergyStorage(maxpowercapacity);
 
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
-        upgradeinv.deserializeNBT(compound);
-        return compound;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        upgradeinv.serializeNBT();
-    }
+    @NBTSave public InventorySimpleItemhander upgradeinv = new InventorySimpleItemhander(64, 1,"upgrade",this);
 
     private void ReCalculateUpgrade(){
         if (upgradeinv.getStackInSlot(0) != null){
@@ -57,47 +42,7 @@ public class TileGenBase extends TileEntity implements IInventoryOnwer, IDescSyn
     }
     public void onGuiUpdate(){}
 
-    @Override
-    public Type getSyncType() {
-        return Type.TILE_ENTITY;
-    }
 
-    @Override
-    public List<SyncField> getDescriptionFields() {
-        if(descriptionFields == null) {
-            descriptionFields = NetworkUtils.getSyncFields(this, DescSync.class);
-            for(SyncField field : descriptionFields) {
-                field.update();
-            }
-        }
-        return descriptionFields;
-    }
-
-    @Override
-    public void writeToPacket(NBTTagCompound tag) {}
-
-    @Override
-    public void readFromPacket(NBTTagCompound tag) {}
-
-    @Override
-    public int getX() {
-        return pos.getX();
-    }
-
-    @Override
-    public int getY() {
-        return pos.getY();
-    }
-
-    @Override
-    public int getZ() {
-        return pos.getZ();
-    }
-
-    @Override
-    public void onDescUpdate() {
-
-    }
     public boolean HasRoomForEnergy(){
         return energyStorage.getEnergyStored() < energyStorage.getMaxEnergyStored();
     }

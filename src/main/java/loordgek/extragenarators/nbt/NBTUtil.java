@@ -12,7 +12,7 @@ import java.util.*;
 
 public class NBTUtil {
 
-    public static NBTTagCompound getFieldswrite(Object te, List<Field> nbtFieldsList, NBTTagCompound compound) throws IllegalAccessException {
+    public static NBTTagCompound getFieldswrite(Object te, List<Field> nbtFieldsList) throws IllegalAccessException {
         NBTTagList nbt = new NBTTagList();
         for (Field field : nbtFieldsList) {
             field.setAccessible(true);
@@ -42,7 +42,7 @@ public class NBTUtil {
         //return compound;
     }
 
-    public static void getFieldsread(Object te, List<Field> nbtFieldsList, NBTTagCompound compound) throws IllegalAccessException, NoSuchFieldException {
+    public static void getFieldsread(Object te, NBTTagCompound compound) throws IllegalAccessException, NoSuchFieldException {
         NBTTagList nbttag = compound.getTagList("NBTave", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < nbttag.tagCount(); i++) {
             NBTTagCompound comp = nbttag.getCompoundTagAt(i);
@@ -57,8 +57,8 @@ public class NBTUtil {
 
             field.setAccessible(true);
             Object object = field.get(te);
-            if (object instanceof int[]) {
 
+            if (object instanceof int[]) {
                 int[] array = (int[]) object;
                 LogHelper.info(array);
                 field.set(te, comp.getIntArray(field.getName()));
@@ -74,39 +74,17 @@ public class NBTUtil {
         }
     }
 
-
-    public static List<Field> GetFields(Object te, Object teend, Class searchedAnnotation) {
+    public static List<Field> GetFields(Object te, Class searchedAnnotation) {
         List<Field> fieldList = new ArrayList<Field>();
-        for (Class clazz : GetClasslist(te, teend)) {
-            {
-                for (Field field : clazz.getDeclaredFields()) {
-                    if (field.getAnnotation(searchedAnnotation) != null) {
-                        fieldList.add(field);
-                    }
+        Class examinedClass = te.getClass();
+        while (examinedClass != null) {
+            for (Field field : examinedClass.getDeclaredFields()) {
+                if (field.getAnnotation(searchedAnnotation) != null) {
+                    fieldList.add(field);
                 }
             }
+            examinedClass = examinedClass.getSuperclass();
         }
         return fieldList;
-    }
-
-    private static List<Class> GetClasslist(Object startobj, Object endobj) {
-        List<Class> classList = new ArrayList<Class>();
-        Class clazz = startobj.getClass();
-        if (startobj.getClass() == endobj.getClass()) {
-            while (clazz != null) {
-                classList.add(clazz);
-            }
-            clazz.getSuperclass();
-        } else {
-            while (startobj.getClass() != endobj.getClass()) {
-                if (clazz != null) {
-                    classList.add(clazz);
-                    clazz = clazz.getSuperclass();
-                } else {
-                    break;
-                }
-            }
-        }
-        return classList;
     }
 }

@@ -1,9 +1,9 @@
 package loordgek.extragenarators.tile;
 
 import loordgek.extragenarators.enums.EnumInvFlow;
+import loordgek.extragenarators.nbt.NBTSave;
 import loordgek.extragenarators.util.item.InventorySimpleItemhander;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -11,7 +11,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 public class TileFurnaceGen extends TileGenBase implements ITickable {
-    public InventorySimpleItemhander fuelSlot = new InventorySimpleItemhander(64, 1, "FuelSlot", this);
+     @NBTSave public InventorySimpleItemhander fuelSlot = new InventorySimpleItemhander(64, 1, "FuelSlot", this);
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
@@ -31,21 +31,8 @@ public class TileFurnaceGen extends TileGenBase implements ITickable {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        fuelSlot.deserializeNBT(compound.getCompoundTag("FuelSlot"));
-
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
-        compound.setTag("FuelSlot", fuelSlot.serializeNBT());
-        return compound;
-    }
-
-    @Override
     public void update() {
+        super.update();
         if (!worldObj.isRemote) {
             if (HasRoomForEnergy()){
                 if (!IsRunning()){
