@@ -18,7 +18,7 @@ public class InitItems {
 
     }
     private static Item registeritem(ItemMain item ,String name){
-        GameRegistry.register(item , new ResourceLocation(Reference.TEXTURE.RESOURCE_PREFIX + name));
+        GameRegistry.register(item , new ResourceLocation(Reference.RESOURCE.RESOURCE_PREFIX + name));
         if (SideUtil.isClient()){ModelLoader.setCustomModelResourceLocation(item,0, new ModelResourceLocation(name, "inventory"));}
 
         return item;

@@ -24,7 +24,7 @@ public class InitBlocks {
     }
 
     private static Block registerBlock(BlockMain block, ItemBlock itemblock, String name){
-        ModelResourceLocation modelResourceLocation = new  ModelResourceLocation(Reference.TEXTURE.RESOURCE_PREFIX ,"inventory");
+        ModelResourceLocation modelResourceLocation = new  ModelResourceLocation(Reference.RESOURCE.RESOURCE_PREFIX ,"inventory");
         GameRegistry.register(block,new ResourceLocation(Reference.MODINFO.MOD_ID + ":" + name));
         if (itemblock == null ){GameRegistry.register(new ItemBlock(block),block.getRegistryName());}
         else GameRegistry.register(itemblock ,block.getRegistryName());

@@ -18,7 +18,7 @@ group = "loordgek"
 archivesBaseName = "extragenarators"
 
 minecraft {
-    version = "1.10.2-12.18.1.2084"
+    version = "1.10.2-12.18.2.2118"
     runDir = "run"
 
     // the mappings can be changed at any time, and must be in the following format.
@@ -26,16 +26,21 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20160912"
+    mappings = "snapshot_20160923"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
 repositories {
     mavenCentral()
+    maven {
+        name "javax.json"
+        url "https://mvnrepository.com/artifact/org.glassfish/javax.json"
+    }
 }
 
 dependencies {
     compile "org.projectlombok:lombok:1.16.10"
+    compile group: 'org.glassfish', name: 'javax.json', version: '1.0.4'
 }
 
 processResources {

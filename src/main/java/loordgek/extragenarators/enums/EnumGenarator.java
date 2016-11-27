@@ -11,8 +11,8 @@ public enum EnumGenarator implements IStringSerializable {
     public static final EnumGenarator[] EnumLookup = new EnumGenarator[values().length];
 
     static {
-        for (EnumGenarator alloy : values()) {
-            EnumLookup[alloy.getMeta()] = alloy;
+        for (EnumGenarator enumgen : values()) {
+            EnumLookup[enumgen.getMeta()] = enumgen;
         }
     }
 

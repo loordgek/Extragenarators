@@ -2,10 +2,10 @@ package loordgek.extragenarators.network;
 
 import io.netty.buffer.ByteBuf;
 import loordgek.extragenarators.container.container.ContainerExtragenarators;
+import loordgek.extragenarators.util.ForgePower;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -69,9 +69,7 @@ public class GuiSyncPacket extends AbstractPacket<GuiSyncPacket> {
                 if(!buf.readBoolean()) return null;
                 return new FluidStack(FluidRegistry.getFluid(ByteBufUtils.readUTF8String(buf)), buf.readInt(), ByteBufUtils.readTag(buf));
             case 10:
-                return buf.readInt();
-
-
+                return new PowerSync(buf.readInt(), buf.readInt());
         }
         throw new IllegalArgumentException("Invalid sync type! " + type);
     }
@@ -114,8 +112,9 @@ public class GuiSyncPacket extends AbstractPacket<GuiSyncPacket> {
                    ByteBufUtils.writeTag(buf, stack.tag);
                }break;
            case 10:
-               EnergyStorage storage = (EnergyStorage) value;
-               buf.writeInt(storage.getEnergyStored());
+               PowerSync powerSync = (PowerSync)value;
+               buf.writeInt(powerSync.getEnergy());
+               buf.writeInt(powerSync.getEnergystore());
                break;
         }
     }

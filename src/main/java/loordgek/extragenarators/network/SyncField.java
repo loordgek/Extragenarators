@@ -1,16 +1,14 @@
 package loordgek.extragenarators.network;
 
+import loordgek.extragenarators.util.ForgePower;
 import loordgek.extragenarators.util.LogHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.lang.reflect.Field;
+
 /*
 *    PneumaticCraft code. author = MineMaarten
 *    https://github.com/MineMaarten/PneumaticCraft
@@ -96,13 +94,12 @@ public abstract class SyncField<T> {
 
         @Override
         protected Byte getValueForArray(Object array, int index) {
-            return ((byte[])array)[index];
+            return ((byte[]) array)[index];
         }
 
         @Override
         protected void setValueForArray(Object array, int index, Byte value) throws Exception {
-            ((byte[])array)[index] = value;
-
+            ((byte[]) array)[index] = value;
         }
 
         @Override
@@ -177,12 +174,12 @@ public abstract class SyncField<T> {
 
         @Override
         protected Float getValueForArray(Object array, int index) {
-            return ((float[])array)[index];
+            return ((float[]) array)[index];
         }
 
         @Override
         protected void setValueForArray(Object array, int index, Float value) throws Exception {
-            ((float[])array)[index] = value;
+            ((float[]) array)[index] = value;
 
         }
     }
@@ -195,12 +192,12 @@ public abstract class SyncField<T> {
 
         @Override
         protected Double getValueForArray(Object array, int index) {
-            return ((double[])array)[index];
+            return ((double[]) array)[index];
         }
 
         @Override
         protected void setValueForArray(Object array, int index, Double value) throws Exception {
-            ((double[])array)[index] = value;
+            ((double[]) array)[index] = value;
         }
     }
 
@@ -212,12 +209,12 @@ public abstract class SyncField<T> {
 
         @Override
         protected Boolean getValueForArray(Object array, int index) {
-            return ((boolean[])array)[index];
+            return ((boolean[]) array)[index];
         }
 
         @Override
         protected void setValueForArray(Object array, int index, Boolean value) throws Exception {
-            ((boolean[])array)[index] = value;
+            ((boolean[]) array)[index] = value;
         }
     }
 
@@ -228,12 +225,12 @@ public abstract class SyncField<T> {
 
         @Override
         protected String getValueForArray(Object array, int index) {
-            return ((String[])array)[index];
+            return ((String[]) array)[index];
         }
 
         @Override
         protected void setValueForArray(Object array, int index, String value) throws Exception {
-            ((String[])array)[index] = value;
+            ((String[]) array)[index] = value;
         }
     }
 
@@ -294,31 +291,32 @@ public abstract class SyncField<T> {
 
     }
 
-    public static class Energyfiedsync extends SyncField<Integer> {
+    public static class Energyfiedsync extends SyncField<PowerSync> {
         public Energyfiedsync(Object te, Field field) {
             super(te, field);
         }
 
         @Override
-        protected Integer getValueForArray(Object array, int index) {
-            return ((EnergyStorage[]) array)[index].getEnergyStored() ;
+        protected PowerSync getValueForArray(Object array, int index) {
+            return new PowerSync(((ForgePower[]) array)[index].getEnergyStored(), ((ForgePower[]) array)[index].getMaxEnergyStored());
         }
 
         @Override
-        protected void setValueForArray(Object array, int index, Integer value) throws Exception {
-            ((EnergyStorage[]) array)[index].receiveEnergy(value, false);
+        protected void setValueForArray(Object array, int index, PowerSync value) throws Exception {
+            ((ForgePower[]) array)[index].setEnergy(value.getEnergy());
         }
 
         @Override
-        protected Integer retrieveValue(Field field, Object te) throws Exception {
-            EnergyStorage energyStorage = (EnergyStorage)field.get(te);
-            return energyStorage.getEnergyStored();
+        protected PowerSync retrieveValue(Field field, Object te) throws Exception {
+            ForgePower power = (ForgePower) field.get(te);
+            return new PowerSync(power.getEnergyStored(), power.getMaxEnergyStored());
         }
 
         @Override
-        protected void injectValue(Field field, Object te, Integer value) throws Exception {
-            EnergyStorage energyStorage = (EnergyStorage)field.get(te);
-            energyStorage.receiveEnergy(value, false);
+        protected void injectValue(Field field, Object te, PowerSync value) throws Exception {
+            ForgePower power = (ForgePower) field.get(te);
+            power.setEnergy(value.getEnergy());
+            power.setCapacity(value.getEnergystore());
         }
     }
 }

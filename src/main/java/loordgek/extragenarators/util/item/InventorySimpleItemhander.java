@@ -26,6 +26,7 @@ public class InventorySimpleItemhander implements IItemHandler, IItemHandlerModi
         this.onwer = onwer;
         this.stacks = new ItemStack[invsize];
     }
+
     @Override
     public int getSlots() {
         return invsize;
@@ -44,52 +45,48 @@ public class InventorySimpleItemhander implements IItemHandler, IItemHandlerModi
         ItemStack stackinslot = getStackInSlot(slot);
 
         int m;
-        if (stackinslot != null){
-            if (!ItemHandlerHelper.canItemStacksStack(stack ,stackinslot))
+        if (stackinslot != null) {
+            if (!ItemHandlerHelper.canItemStacksStack(stack, stackinslot))
                 return stack;
 
             m = Math.min(stack.getMaxStackSize(), stacksize - stackinslot.stackSize);
-            if (stack.stackSize <= m){
-                if (!simulate){
+            if (stack.stackSize <= m) {
+                if (!simulate) {
                     ItemStack copy = stack.copy();
                     copy.stackSize += stackinslot.stackSize;
                     stacks[slot] = stack;
-                    onwer.OnInventoryChanged(stack,slot,name, EnumInvFlow.INSERT);
+                    onwer.OnInventoryChanged(stack, slot, name, EnumInvFlow.INSERT);
                     onwer.markDirty();
                 }
                 return null;
 
-            }
-            else{
+            } else {
                 stack = stack.copy();
-                if (!simulate){
+                if (!simulate) {
                     ItemStack copy = stack.splitStack(m);
                     copy.stackSize += stackinslot.stackSize;
                     stacks[slot] = stack;
-                    onwer.OnInventoryChanged(stack,slot,name, EnumInvFlow.INSERT);
+                    onwer.OnInventoryChanged(stack, slot, name, EnumInvFlow.INSERT);
                     onwer.markDirty();
-                    }
+                }
             }
-        }
-        else {
+        } else {
             m = Math.min(stack.getMaxStackSize(), stacksize);
             if (m < stack.stackSize) {
                 stack = stack.copy();
                 if (!simulate) {
                     stacks[slot] = stack;
-                    onwer.OnInventoryChanged(stack,slot,name, EnumInvFlow.INSERT);
+                    onwer.OnInventoryChanged(stack, slot, name, EnumInvFlow.INSERT);
                     onwer.markDirty();
                     return stack;
-                }
-                else {
+                } else {
                     stack.stackSize -= m;
                     return stack;
                 }
-            }
-            else {
+            } else {
                 if (!simulate) {
                     stacks[slot] = stack;
-                    onwer.OnInventoryChanged(stack,slot,name, EnumInvFlow.INSERT);
+                    onwer.OnInventoryChanged(stack, slot, name, EnumInvFlow.INSERT);
                     onwer.markDirty();
                 }
                 return null;
@@ -119,38 +116,32 @@ public class InventorySimpleItemhander implements IItemHandler, IItemHandlerModi
             int m = Math.min(stackInSlot.stackSize, amount);
 
             ItemStack decrStackSize = decrStackSize(slot, amount);
-            onwer.OnInventoryChanged(decrStackSize ,slot ,name ,EnumInvFlow.EXTRAXT);
+            onwer.OnInventoryChanged(decrStackSize, slot, name, EnumInvFlow.EXTRACT);
             onwer.markDirty();
             return decrStackSize;
         }
-
-
     }
-    public ItemStack decrStackSize(int slot, int count){
-        if (stacks[slot].stackSize <= count){
+
+    public ItemStack decrStackSize(int slot, int count) {
+        if (stacks[slot].stackSize <= count) {
 
             ItemStack stack = this.stacks[slot];
             stacks[slot] = null;
             return stack;
-        }
-        else {
+        } else {
             ItemStack stack = stacks[slot].splitStack(count);
-            if (stacks[slot].stackSize == 0){
+            if (stacks[slot].stackSize == 0) {
                 stacks[slot] = null;
             }
             return stack;
         }
-
     }
 
     @Override
-    public NBTTagCompound serializeNBT()
-    {
+    public NBTTagCompound serializeNBT() {
         NBTTagList nbtTagList = new NBTTagList();
-        for (int i = 0; i < stacks.length; i++)
-        {
-            if (stacks[i] != null)
-            {
+        for (int i = 0; i < stacks.length; i++) {
+            if (stacks[i] != null) {
                 NBTTagCompound itemTag = new NBTTagCompound();
                 itemTag.setInteger("Slot", i);
                 stacks[i].writeToNBT(itemTag);
@@ -158,21 +149,18 @@ public class InventorySimpleItemhander implements IItemHandler, IItemHandlerModi
             }
         }
         NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setTag("Items", nbtTagList);
+        nbt.setTag("items", nbtTagList);
         return nbt;
     }
 
     @Override
-    public void deserializeNBT(NBTTagCompound nbt)
-    {
-        NBTTagList tagList = nbt.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-        for (int i = 0; i < tagList.tagCount(); i++)
-        {
+    public void deserializeNBT(NBTTagCompound nbt) {
+        NBTTagList tagList = nbt.getTagList("items", Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < tagList.tagCount(); i++) {
             NBTTagCompound itemTags = tagList.getCompoundTagAt(i);
             int slot = itemTags.getInteger("Slot");
 
-            if (slot >= 0 && slot <= stacks.length)
-            {
+            if (slot >= 0 && slot <= stacks.length) {
                 stacks[slot] = ItemStack.loadItemStackFromNBT(itemTags);
 
             }
@@ -182,13 +170,11 @@ public class InventorySimpleItemhander implements IItemHandler, IItemHandlerModi
 
     @Override
     public void setStackInSlot(int slot, ItemStack stack) {
-        boolean markdirty = false;
         stacks[slot] = stack;
-        if (!markdirty){
-            onwer.markDirty();
-            markdirty = true;
-        }
+        onwer.markDirty();
+    }
 
-
+    protected IInventoryOnwer getOnwer() {
+        return onwer;
     }
 }

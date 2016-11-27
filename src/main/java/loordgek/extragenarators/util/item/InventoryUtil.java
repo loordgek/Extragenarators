@@ -12,10 +12,10 @@ public class InventoryUtil {
         }
         return stacks;
     }
-    public static boolean IsItemHanderEmty(IItemHandler itemHandler){
+    public static boolean hasItemHanderItems(IItemHandler itemHandler) {
         boolean[] array = new boolean[itemHandler.getSlots()];
         for (int i = 0; i < itemHandler.getSlots(); i++) {
-            if (itemHandler.getStackInSlot(i) == null){
+            if (itemHandler.getStackInSlot(i) == null) {
                 array[i] = true;
             }
         }
@@ -25,7 +25,7 @@ public class InventoryUtil {
         }
         return false;
     }
-/*
+    /*
     public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, boolean oreDictionary, boolean doRemove) {
         ItemStack[] stock = getStacks(inventory);
 
@@ -62,14 +62,6 @@ public class InventoryUtil {
             removed[i] = removedStack;
         }
         return removed;
-    }
-
-    public static ItemStack[] getStacks(IItemHandler itemHandler) {
-        ItemStack[] stacks = new ItemStack[itemHandler.getSlots()];
-        for (int i = 0; i < itemHandler.getSlots(); i++) {
-            stacks[i] = itemHandler.getStackInSlot(i);
-        }
-        return stacks;
     }
 
     private static ItemStack removeStack(IInventory inventory, ItemStack stackToRemove, boolean oreDictionary) {
@@ -125,7 +117,7 @@ public class InventoryUtil {
             for (ItemStack offer : condensedOffered) {
                 if (IsItemStackEqual(req, offer)) {
                     int stackCount = (int) Math.floor(offer.stackSize / req.stackSize);
-                    reqCount = Math.max(reqCount, stackCount);
+                    reqCount = Math.Max(reqCount, stackCount);
                 }
             }
 
@@ -139,32 +131,13 @@ public class InventoryUtil {
         }
 
         return totalSets;
-    }
-    public static boolean IsItemStackEqual(ItemStack stack1, ItemStack stack2){
-        if (stack1 == null || stack2 == null) return false;
-        if (!stack1.isItemEqual(stack2))return false;
-        return stack1.getTagCompound() == stack2.getTagCompound();
-
-    }
-
-    public static int getNumberOfItems(Item item, ItemStack[] itemStacks, boolean meta, int metadata){
-        int numberofitems = 0;
-        for (ItemStack stack : itemStacks) {
-            if (!meta){
-                if (stack.getItem() == item){
-                    numberofitems += stack.stackSize;
-                }
-            }
-            else {
-                if (stack.getItemDamage() == metadata){
-                    if (stack.getItem() == item){
-                        numberofitems += stack.stackSize;
-                    }
-                }
-            }
-        }
-        return numberofitems;
     }*/
+    public static boolean IsItemStackEqual(ItemStack stack1, ItemStack stack2) {
+        return !(stack1 == null || stack2 == null) && stack1.isItemEqual(stack2) && stack1.getTagCompound() == stack2.getTagCompound();
+
+    }
+
+
     public static boolean isBucket(ItemStack stack)
     {
         return stack != null && stack.getItem() != null && stack.getItem() == Items.BUCKET;

@@ -1,10 +1,14 @@
 package loordgek.extragenarators.proxy;
 
-import loordgek.extragenarators.blocks.BlockMain;
-import loordgek.extragenarators.items.ItemMain;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public interface IProxy
 {
     EntityPlayer getclientplayer();
+    void preinit(FMLPreInitializationEvent event);
+    void setCustomModelResourceLocationitem(Item item, int meta, ModelResourceLocation location);
+
 }

@@ -28,7 +28,6 @@ public class GuiHander implements IGuiHandler {
             case furnacegengui:
                 return new ContainerFurnaceGen(player ,(TileFurnaceGen)tile);
         }
-
         return null;
 }
     @Override
@@ -40,7 +39,6 @@ public class GuiHander implements IGuiHandler {
             case furnacegengui:
                 return new GuiFurnaceGen(player ,(TileFurnaceGen)tile);
         }
-
             return null;
     }
 }

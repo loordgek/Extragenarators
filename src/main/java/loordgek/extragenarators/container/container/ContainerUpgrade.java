@@ -14,7 +14,7 @@ public class ContainerUpgrade extends ContainerExtragenarators<TileGenBase> {
 
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
-                addSlotToContainer(new SlotUpgrade(tileGenBase.upgradeinv,i + j , 8 + j * 18, 18 + i * 18));
+                addSlotToContainer(new SlotUpgrade(tileGenBase.upgradeinv,i + j * 2, 8 + j * 18, 18 + i * 18));
             }
         }
         addPlayerSlots(player.inventory,4,80);
@@ -30,4 +30,5 @@ public class ContainerUpgrade extends ContainerExtragenarators<TileGenBase> {
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
         return null;
     }
+
 }

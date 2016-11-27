@@ -1,14 +1,15 @@
 package loordgek.extragenarators.nbt;
 
 import loordgek.extragenarators.util.LogHelper;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fluids.FluidTank;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NBTUtil {
 
@@ -20,20 +21,28 @@ public class NBTUtil {
             NBTTagCompound nbtcomp = new NBTTagCompound();
             nbtcomp.setString("fieldname", field.getName());
 
+            if (field.getType() == int.class) {
+                int Int = (Integer) object;
+                nbtcomp.setInteger(field.getName(), Int);
+                nbt.appendTag(nbtcomp);
+                continue;
+            }
             if (object instanceof int[]) {
                 int[] array = (int[]) object;
-                LogHelper.info(array);
                 nbtcomp.setIntArray(field.getName(), array);
                 nbt.appendTag(nbtcomp);
                 continue;
-
             }
             if (object instanceof INBTSerializable) {
-                LogHelper.info(object);
-                INBTSerializable in = (INBTSerializable) object;
-                nbtcomp.setTag(field.getName(), in.serializeNBT());
+                INBTSerializable serializable = (INBTSerializable) object;
+                nbtcomp.setTag(field.getName(), serializable.serializeNBT());
                 nbt.appendTag(nbtcomp);
-
+                continue;
+            }
+            if (object instanceof FluidTank){
+                FluidTank fluidTank = (FluidTank) object;
+                nbtcomp.setTag(field.getName(), fluidTank.writeToNBT(nbtcomp));
+                nbt.appendTag(nbtcomp);
             }
         }
         NBTTagCompound tagCompound = new NBTTagCompound();
@@ -49,7 +58,7 @@ public class NBTUtil {
             Class clazz = te.getClass();
             Field field = null;
             if (clazz.getField(comp.getString("fieldname")) == null) {
-                clazz = te.getClass().getSuperclass();
+                clazz = clazz.getSuperclass();
             } else field = clazz.getField(comp.getString("fieldname"));
 
             if (field == null)
@@ -58,33 +67,23 @@ public class NBTUtil {
             field.setAccessible(true);
             Object object = field.get(te);
 
+            if (field.getType() == int.class) {
+                field.set(te, comp.getInteger(field.getName()));
+                continue;
+            }
             if (object instanceof int[]) {
-                int[] array = (int[]) object;
-                LogHelper.info(array);
                 field.set(te, comp.getIntArray(field.getName()));
+                continue;
             }
             if (object instanceof INBTSerializable) {
-                LogHelper.info(object);
-                INBTSerializable in = ((INBTSerializable) object);
-                in.deserializeNBT(comp.getCompoundTag(field.getName()));
-                return;
-
-
+                INBTSerializable serializable = ((INBTSerializable) object);
+                serializable.deserializeNBT(comp.getCompoundTag(field.getName()));
+                continue;
+            }
+            if (object instanceof FluidTank){
+                FluidTank fluidTank = (FluidTank) object;
+                fluidTank.readFromNBT(comp.getCompoundTag(field.getName()));
             }
         }
-    }
-
-    public static List<Field> GetFields(Object te, Class searchedAnnotation) {
-        List<Field> fieldList = new ArrayList<Field>();
-        Class examinedClass = te.getClass();
-        while (examinedClass != null) {
-            for (Field field : examinedClass.getDeclaredFields()) {
-                if (field.getAnnotation(searchedAnnotation) != null) {
-                    fieldList.add(field);
-                }
-            }
-            examinedClass = examinedClass.getSuperclass();
-        }
-        return fieldList;
     }
 }

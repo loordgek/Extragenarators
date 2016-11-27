@@ -6,6 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class GuiUpgrade extends GuiExtragenarators {
     public GuiUpgrade(EntityPlayer player, TileGenBase tileGenBase) {
-        super(new ContainerUpgrade(player, tileGenBase), "lol");
+        super(new ContainerUpgrade(player, tileGenBase), "InterfaceCall", player);
     }
 }

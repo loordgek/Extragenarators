@@ -2,6 +2,7 @@ package loordgek.extragenarators.items;
 
 import loordgek.extragenarators.api.IUpgradeItem;
 import loordgek.extragenarators.ref.Reference;
+import loordgek.extragenarators.util.IVariantLookup;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class ItemUpgrade extends ItemMain implements IUpgradeItem {
+public class ItemUpgrade extends ItemMain implements IUpgradeItem, IVariantLookup{
     public ItemUpgrade() {
         this.setHasSubtypes(true);
         this.setMaxDamage(Reference.ITEMS.typeupgrade.length);
@@ -56,12 +57,12 @@ public class ItemUpgrade extends ItemMain implements IUpgradeItem {
 
     @Override
     public String getUnlocalizedName() {
-        return String.format("item.%s%s", Reference.TEXTURE.RESOURCE_PREFIX, Reference.ITEMS.upgrade);
+        return String.format("item.%s%s", Reference.RESOURCE.RESOURCE_PREFIX, Reference.ITEMS.upgrade);
     }
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return String.format("item.%s%s.%s", Reference.TEXTURE.RESOURCE_PREFIX, Reference.ITEMS.upgrade, Reference.ITEMS.typeupgrade[MathHelper.clamp_int(stack.getItemDamage(), 0, Reference.ITEMS.typeupgrade.length - 1)]);
+        return String.format("item.%s%s.%s", Reference.RESOURCE.RESOURCE_PREFIX, Reference.ITEMS.upgrade, Reference.ITEMS.typeupgrade[MathHelper.clamp_int(stack.getItemDamage(), 0, Reference.ITEMS.typeupgrade.length - 1)]);
     }
 
     @SideOnly(Side.CLIENT)
@@ -71,5 +72,10 @@ public class ItemUpgrade extends ItemMain implements IUpgradeItem {
             subItems.add(new ItemStack(this,1,i));
 
         }
+    }
+
+    @Override
+    public String[] variantnames() {
+        return Reference.ITEMS.typeupgrade;
     }
 }

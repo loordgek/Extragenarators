@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class ContainerFurnaceGen extends ContainerExtragenarators<TileFurnaceGen> {
     TileFurnaceGen te;
+
     public ContainerFurnaceGen(EntityPlayer player, TileFurnaceGen te) {
         super(te);
         this.te = te;

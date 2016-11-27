@@ -1,14 +1,20 @@
 package loordgek.extragenarators;
 
-import loordgek.extragenarators.init.InitBlocks;
-import loordgek.extragenarators.init.InitItems;
+import loordgek.extragenarators.blocks.Blocks;
+import loordgek.extragenarators.event.CommenEventHandler;
 import loordgek.extragenarators.init.InitTile;
 import loordgek.extragenarators.network.NetworkHandler;
 import loordgek.extragenarators.proxy.IProxy;
 import loordgek.extragenarators.ref.Reference;
+import loordgek.extragenarators.util.BlockStateGenerator;
+import loordgek.extragenarators.util.JavaUtil;
+import loordgek.extragenarators.util.LogHelper;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -26,15 +32,30 @@ public class Extragenarators {
     public static IProxy proxy;
 
     @EventHandler
-    public void preinit(FMLPreInitializationEvent event){
-        InitBlocks.Init();
-        InitItems.Init();
+    public void onFMLConstruction(FMLConstructionEvent event) {
+        LogHelper.info("FMLConstructionEvent");
+    }
+
+    // something before preinit woot
+    @EventHandler
+    public void fingerprint(FMLFingerprintViolationEvent event) {
+        LogHelper.info("fingerprint");
+        MinecraftForge.EVENT_BUS.register(new CommenEventHandler());
+    }
+
+    @EventHandler
+    public void preinit(FMLPreInitializationEvent event) {
+        LogHelper.info("preinit");
+        proxy.preinit(event);
         InitTile.Init();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHander());
         NetworkHandler.initNetwork();
-
-
+        LogHelper.info(JavaUtil.getsourcepath(this.getClass(), 5));
+        BlockStateGenerator.BlocktateGeneratorforgeV1("C://Modding/forge", Reference.MODINFO.MOD_ID, "genaratorbase", Blocks.GEN);
     }
+
     @EventHandler
-    public void init(FMLInitializationEvent event){}
+    public void init(FMLInitializationEvent event) {
+        LogHelper.info("init");
+    }
 }

@@ -6,10 +6,16 @@ import loordgek.extragenarators.network.DescSync;
 import loordgek.extragenarators.network.IDescSync;
 import loordgek.extragenarators.network.NetworkUtils;
 import loordgek.extragenarators.network.SyncField;
+import loordgek.extragenarators.util.JavaUtil;
 import loordgek.extragenarators.util.LogHelper;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -19,19 +25,17 @@ public class TileMain extends TileEntity implements ITickable, IDescSync {
     private List<Field> NBTfieldlist = new ArrayList<Field>();
     private List<SyncField> descriptionFields;
     private int timer;
-    private boolean tickonetime = true;
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         try {
-            NBTUtil.getFieldsread(this, compound.getCompoundTag("lol"));
+            NBTUtil.getFieldsread(this, compound.getCompoundTag("InterfaceCall"));
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-        //  NBTUtil.getFieldsread(this, NBTfieldlist, compound);
         LogHelper.info(compound);
 
     }
@@ -43,7 +47,7 @@ public class TileMain extends TileEntity implements ITickable, IDescSync {
         try {
             if (NBTUtil.getFieldswrite(this, NBTfieldlist) != null) {
                 try {
-                    compound.setTag("lol", NBTUtil.getFieldswrite(this, NBTfieldlist));
+                    compound.setTag("InterfaceCall", NBTUtil.getFieldswrite(this, NBTfieldlist));
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -52,41 +56,37 @@ public class TileMain extends TileEntity implements ITickable, IDescSync {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        LogHelper.info(compound);
         return compound;
     }
 
-    private void addFields(Object annotatedObject) {
-        this.NBTfieldlist = NBTUtil.GetFields(annotatedObject, NBTSave.class);
+    public void addFields(Object annotatedObject) {
+        this.NBTfieldlist = JavaUtil.GetFields(annotatedObject, NBTSave.class);
     }
 
     @Override
     public void update() {
-        if (!worldObj.isRemote) {
-            updateserverside();
-            timer++;
-            if (timer == 10){
-                if (tickonetime){
-                    tickonetimeafter10ticks();
-                    tickonetime = false;
-                }
+        timer++;
+        if (timer == 40) {
+            timer = 0;
+            if (!worldObj.isRemote){
+                update2secSeverSide();
             }
-            if (timer == 40) {
-                timer = 0;
-                update2sec();
-            }
+            else update2secClientSide();
         }
+        if (!worldObj.isRemote) {
+            updateServerSide();
+        }
+        else updateClientSide();
     }
-    private void updateserverside(){}
+    private void updateClientSide(){}
 
-    public void update2sec() {}
+    private void updateServerSide(){}
 
-    private void tickonetimeafter10ticks(){
-        if (!worldObj.isRemote) {
-            LogHelper.info("load");
-            addFields(worldObj.getTileEntity(pos));
-            LogHelper.info(NBTfieldlist);
-        }
+    public void update2secSeverSide() {}
+
+    public void update2secClientSide() {}
+
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack){
 
     }
 
@@ -104,6 +104,9 @@ public class TileMain extends TileEntity implements ITickable, IDescSync {
             }
         }
         return descriptionFields;
+    }
+
+    public void onGuiUpdate() {
     }
 
     @Override

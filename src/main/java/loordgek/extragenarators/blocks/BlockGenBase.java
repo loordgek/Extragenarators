@@ -3,12 +3,14 @@ package loordgek.extragenarators.blocks;
 import loordgek.extragenarators.Extragenarators;
 import loordgek.extragenarators.GuiHander;
 import loordgek.extragenarators.enums.EnumGenarator;
-import loordgek.extragenarators.init.InitBlocks;
 import loordgek.extragenarators.tile.TileFurnaceGen;
+import loordgek.extragenarators.tile.TileMain;
+import loordgek.extragenarators.util.lookup.IVariantLookup;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,18 +26,23 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BlockGenBase extends BlockMain {
-    private final static PropertyEnum<EnumGenarator> genmeta = PropertyEnum.create("genmeta",EnumGenarator.class);
+public class BlockGenBase extends BlockMain implements IVariantLookup {
+    private final static PropertyEnum<EnumGenarator> genmeta = PropertyEnum.create("genmeta", EnumGenarator.class);
 
     public BlockGenBase() {
         this.setCreativeTab(CreativeTabs.FOOD);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(genmeta ,EnumGenarator.byMeta(0)));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(genmeta, EnumGenarator.byMeta(0)));
+    }
+
+    @Override
+    public BlockMain getblock() {
+        return new BlockGenBase();
     }
 
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         int meta = getMetaFromState(state);
-        switch (meta){
+        switch (meta) {
             case 0:
                 return new TileFurnaceGen();
         }
@@ -49,9 +56,9 @@ public class BlockGenBase extends BlockMain {
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (!worldIn.isRemote){
+        if (!worldIn.isRemote) {
             int meta = getMetaFromState(state);
-            if (!playerIn.isSneaking()){
+            if (!playerIn.isSneaking()) {
                 switch (meta) {
                     case 0:
                         playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.furnacegengui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
@@ -61,12 +68,19 @@ public class BlockGenBase extends BlockMain {
                         playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.endergengui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
                 }
 
-            }
-            else playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.upgradegui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+            } else
+                playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.upgradegui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
 
 
         return true;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        TileEntity tileEntity = worldIn.getTileEntity(pos);
+        assert (tileEntity) != null;
+        ((TileMain) tileEntity).onBlockPlacedBy(worldIn, pos, state, placer, stack);
     }
 
     @SideOnly(Side.CLIENT)
@@ -79,7 +93,7 @@ public class BlockGenBase extends BlockMain {
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(genmeta,EnumGenarator.byMeta(meta));
+        return this.getDefaultState().withProperty(genmeta, EnumGenarator.byMeta(meta));
     }
 
     @Override
@@ -94,11 +108,21 @@ public class BlockGenBase extends BlockMain {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this ,genmeta);
+        return new BlockStateContainer(this, genmeta);
     }
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        return new ItemStack((InitBlocks.GenITEM) ,1 ,this.getMetaFromState(world.getBlockState(pos)));
+        return new ItemStack((Blocks.GenITEM), 1, this.getMetaFromState(world.getBlockState(pos)));
+    }
+
+    @Override
+    public String[] variantnames() {
+        String[] strings = new String[EnumGenarator.getlenth()];
+        for (int i = 0; i < EnumGenarator.getlenth(); i++) {
+            strings[i] = EnumGenarator.byMeta(i).getName();
+        }
+        return strings;
     }
 }
+

@@ -1,13 +1,23 @@
 package loordgek.extragenarators.client.gui;
 
+import loordgek.extragenarators.client.gui.widgets.WidgetFire;
+import loordgek.extragenarators.client.gui.widgets.WidgetPower;
 import loordgek.extragenarators.container.container.ContainerFurnaceGen;
 import loordgek.extragenarators.tile.TileFurnaceGen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 
 public class GuiFurnaceGen extends GuiExtragenarators {
-    public GuiFurnaceGen(EntityPlayer player , TileFurnaceGen tileFurnaceGen) {
-        super(new ContainerFurnaceGen(player, tileFurnaceGen), "furnacegen");
+    private final TileFurnaceGen te;
+    public GuiFurnaceGen(EntityPlayer player, TileFurnaceGen te) {
+        super(new ContainerFurnaceGen(player, te), "furnacegen", player);
+        this.te = te;
+        this.ySize = 200;
+        this.xSize = 190;
+    }
+
+    @Override
+    public void initialize() {
+        addWidget(new WidgetPower(0, 50,  30, 80, 80, this , te.power));
+        addWidget(new WidgetFire(1, 30, 30, this, te));
     }
 }
