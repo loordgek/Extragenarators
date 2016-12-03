@@ -15,12 +15,10 @@ public class SlotUpgrade extends SlotItemHandler {
 
     public SlotUpgrade(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
         super(itemHandler, index, xPosition, yPosition);
-
     }
 
     @Override
     public boolean isItemValid(@Nullable ItemStack stack) {
-        return stack != null && stack.getItem() instanceof IUpgradeItem &&
-                super.isItemValid(stack);
+        return stack != null && stack.getItem() instanceof IUpgradeItem && super.isItemValid(stack);
     }
 }

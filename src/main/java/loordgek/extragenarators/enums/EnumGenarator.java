@@ -5,7 +5,7 @@ import net.minecraft.util.IStringSerializable;
 public enum EnumGenarator implements IStringSerializable {
     furnace("furnace", 0),
     lava("lava",1),
-    ender("ender",2),
+    //ender("ender",2),
     ;
 
     public static final EnumGenarator[] EnumLookup = new EnumGenarator[values().length];

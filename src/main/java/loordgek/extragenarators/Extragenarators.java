@@ -19,6 +19,8 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
+import java.io.IOException;
+
 @Mod(
         modid = "extragenarators",
         name = "Extragenarators",
@@ -51,7 +53,11 @@ public class Extragenarators {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHander());
         NetworkHandler.initNetwork();
         LogHelper.info(JavaUtil.getsourcepath(this.getClass(), 5));
-        BlockStateGenerator.BlocktateGeneratorforgeV1("C://Modding/forge", Reference.MODINFO.MOD_ID, "genaratorbase", Blocks.GEN);
+        try {
+            BlockStateGenerator.BlocktateGeneratorforgeV1("C://Modding/forge", Reference.MODINFO.MOD_ID, "genaratorbase", Blocks.GEN);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @EventHandler

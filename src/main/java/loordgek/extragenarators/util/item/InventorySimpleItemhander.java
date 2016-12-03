@@ -122,7 +122,7 @@ public class InventorySimpleItemhander implements IItemHandler, IItemHandlerModi
         }
     }
 
-    public ItemStack decrStackSize(int slot, int count) {
+    private ItemStack decrStackSize(int slot, int count) {
         if (stacks[slot].stackSize <= count) {
 
             ItemStack stack = this.stacks[slot];

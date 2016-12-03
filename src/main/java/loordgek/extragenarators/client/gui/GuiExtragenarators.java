@@ -64,7 +64,7 @@ public class GuiExtragenarators extends GuiContainer {
 
         for (WidgetBase widget : widgetBaseList)
             if (widget.getBounds().contains(x, y))
-                widget.addTooltip(x, y, tooltips, isShiftKeyDown());
+                widget.addTooltip(x, y, tooltips, isShiftKeyDown(), player);
 
         if (!tooltips.isEmpty()) {
             List<String> finalLines = new ArrayList<String>();

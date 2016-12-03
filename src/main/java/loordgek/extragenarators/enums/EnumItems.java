@@ -3,7 +3,7 @@ package loordgek.extragenarators.enums;
 import loordgek.extragenarators.Extragenarators;
 import loordgek.extragenarators.items.Items;
 import loordgek.extragenarators.ref.Reference;
-import loordgek.extragenarators.util.lookup.IVariantLookup;
+import loordgek.extragenarators.util.IVariantLookup;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
@@ -31,7 +31,7 @@ public enum EnumItems {
     @SideOnly(Side.CLIENT)
     public void RegisterRender() {
         for (int i = 0; i < lookup.variantnames().length; i++) {
-            ModelResourceLocation modelResourceLocation = new ModelResourceLocation(Reference.TEXTURE.RESOURCE_PREFIX + name, lookup.variantnames()[i]);
+            ModelResourceLocation modelResourceLocation = new ModelResourceLocation(Reference.RESOURCE.RESOURCE_PREFIX + name, lookup.variantnames()[i]);
             Extragenarators.proxy.setCustomModelResourceLocationitem(item, i, modelResourceLocation);
         }
     }

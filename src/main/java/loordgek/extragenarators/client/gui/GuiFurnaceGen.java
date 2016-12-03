@@ -17,7 +17,7 @@ public class GuiFurnaceGen extends GuiExtragenarators {
 
     @Override
     public void initialize() {
-        addWidget(new WidgetPower(0, 50,  30, 80, 80, this , te.power));
-        addWidget(new WidgetFire(1, 30, 30, this, te));
+        addWidget(new WidgetPower(0, 150,  10, 16, 64, this , te.power));
+        addWidget(new WidgetFire(1, 80, 45, this, te));
     }
 }

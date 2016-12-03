@@ -21,7 +21,6 @@ public class WidgetBase{
     public final GuiExtragenarators gui;
     public boolean enabled = true;
     public boolean playSound = true;
-    public static int debugtimer = 1;
 
     public WidgetBase(int id, int x, int y, int u, int v, int width, int height, GuiExtragenarators gui) {
         this.id = id;
@@ -45,5 +44,5 @@ public class WidgetBase{
         return new Rectangle(x, y, width, height);
     }
 
-    public void addTooltip(int mouseX, int mouseY, List<String> tooltips, boolean shift) {}
+    public void addTooltip(int mouseX, int mouseY, List<String> tooltips, boolean shift, EntityPlayer player) {}
 }

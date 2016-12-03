@@ -3,6 +3,7 @@ package loordgek.extragenarators.client.gui.widgets;
 import loordgek.extragenarators.client.RenderUtils;
 import loordgek.extragenarators.client.gui.GuiExtragenarators;
 import loordgek.extragenarators.util.IFire;
+import loordgek.extragenarators.util.MathUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -21,7 +22,8 @@ public class WidgetFire extends WidgetBase {
     public void render(int mouseX, int mouseY) {
         RenderUtils.drawWidgetStatic(this, firebackpng);
         if (fire.FireCurrent() != 0){
-            RenderUtils.drawWidgetUp(this, firepng,  RenderUtils.reverseNumber(fire.FireCurrent(), 0, fire.FireMax()), fire.FireMax());
+            RenderUtils.drawWidgetUp(this, firepng, (int) MathUtil.reverseNumber(fire.FireCurrent(), 0, fire.FireMax()), fire.FireMax());
         }
     }
+
 }

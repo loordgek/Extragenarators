@@ -1,6 +1,8 @@
 package loordgek.extragenarators.client;
 
 import loordgek.extragenarators.client.gui.widgets.WidgetBase;
+import loordgek.extragenarators.util.LogHelper;
+import loordgek.extragenarators.util.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
@@ -95,22 +97,22 @@ public class RenderUtils {
 
     public static void drawWidgetRight(WidgetBase widgetBase, ResourceLocation location, int currunt, int max) {
         getTextureManager().bindTexture(location);
-        drawModalRectWithCustomSizedTexture(widgetBase.x, widgetBase.y, 0, 0, widgetBase.width, widgetBase.height, widgetBase.width, widgetBase.height, Drawgui.RIGHT, scale(currunt, max, widgetBase.width));
+        drawModalRectWithCustomSizedTexture(widgetBase.x, widgetBase.y, 0, 0, widgetBase.width, widgetBase.height, widgetBase.width, widgetBase.height, Drawgui.RIGHT, MathUtil.scale(currunt, max, widgetBase.width));
     }
 
     public static void drawWidgetLeft(WidgetBase widgetBase, ResourceLocation location, int currunt, int max) {
         getTextureManager().bindTexture(location);
-        drawModalRectWithCustomSizedTexture(widgetBase.x, widgetBase.y, 0, 0, scalereverse(currunt, max, widgetBase.width), widgetBase.height, widgetBase.width, widgetBase.height, Drawgui.LEFT, currunt);
+        drawModalRectWithCustomSizedTexture(widgetBase.x, widgetBase.y, 0, 0, MathUtil.scalereverse(currunt, max, widgetBase.width), widgetBase.height, widgetBase.width, widgetBase.height, Drawgui.LEFT, currunt);
     }
 
     public static void drawWidgetDown(WidgetBase widgetBase, ResourceLocation location, int currunt, int max) {
         getTextureManager().bindTexture(location);
-        drawModalRectWithCustomSizedTexture(widgetBase.x, widgetBase.y, 0, 0, widgetBase.width, scalereverse(currunt, max, widgetBase.height), widgetBase.width, widgetBase.height, Drawgui.DOWN, currunt);
+        drawModalRectWithCustomSizedTexture(widgetBase.x, widgetBase.y, 0, 0, widgetBase.width, MathUtil.scalereverse(currunt, max, widgetBase.height), widgetBase.width, widgetBase.height, Drawgui.DOWN, currunt);
     }
 
     public static void drawWidgetUp(WidgetBase widgetBase, ResourceLocation location, int currunt, int max) {
         getTextureManager().bindTexture(location);
-        drawModalRectWithCustomSizedTexture(widgetBase.x, widgetBase.y, 0, 0, widgetBase.width, widgetBase.height, widgetBase.width, widgetBase.height, Drawgui.UP, scale(currunt, max, widgetBase.height));
+        drawModalRectWithCustomSizedTexture(widgetBase.x, widgetBase.y, 0, 0, widgetBase.width, widgetBase.height, widgetBase.width, widgetBase.height, Drawgui.UP, MathUtil.scale(currunt, max, widgetBase.height));
     }
 
     public static void drawWidgetStatic(WidgetBase widgetBase, ResourceLocation location) {
@@ -118,36 +120,30 @@ public class RenderUtils {
         Gui.drawModalRectWithCustomSizedTexture(widgetBase.x, widgetBase.y, 0, 0, widgetBase.width, widgetBase.height, widgetBase.width, widgetBase.height);
     }
 
-    public static int scale(int currentint, int maxint, int size) {
-        return currentint * size / maxint;
+    public static void drawWidgetStaticoffset(WidgetBase widgetBase, ResourceLocation location, int X, int Y) {
+        getTextureManager().bindTexture(location);
+        Gui.drawModalRectWithCustomSizedTexture(widgetBase.x + X, widgetBase.y + Y, 0, 0, widgetBase.width, widgetBase.height, widgetBase.width, widgetBase.height);
     }
 
-    public static int reverseNumber(int num, int min, int max) {
-        return (max + min) - num;
-    }
-
-    public static int scalereverse(int currentint, int maxint, int size) {
-        return reverseNumber(currentint, 0, maxint) * size / maxint;
-    }
-    public enum Drawgui{
+    private enum Drawgui {
         UP,
         DOWN,
         RIGHT,
         LEFT
     }
 
-    public static void drawModalRectWithCustomSizedTexture(int x, int y, float u, float v, int width, int height, float textureWidth, float textureHeight, Drawgui drawgui, int current) {
-        float f = 1.0F / textureWidth;
-        float f1 = 1.0F / textureHeight;
-        int drawup = Drawgui.UP == drawgui ? current : 0;
-        int drawright = Drawgui.RIGHT == drawgui ? current : 0;
+    private static void drawModalRectWithCustomSizedTexture(int x, int y, float u, float v, double width, double height, double textureWidth, double textureHeight, Drawgui drawgui, double current) {
+        double f = 1.0F / textureWidth;
+        double f1 = 1.0F / textureHeight;
+        double drawup = Drawgui.UP == drawgui ? current : 0;
+        double drawright = Drawgui.RIGHT == drawgui ? current : 0;
         Tessellator tessellator = Tessellator.getInstance();
         VertexBuffer vertexbuffer = tessellator.getBuffer();
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        vertexbuffer.pos((double) x + drawright, (double) (y + height), 0.0D).tex((double) ((u + (float) drawright)* f), (double) ((v + (float) height) * f1)).endVertex();
-        vertexbuffer.pos((double) (x + width), (double) (y + height), 0.0D).tex((double) ((u + (float) width) * f), (double) ((v + (float) height) * f1)).endVertex();
-        vertexbuffer.pos((double) (x + width), (double) y + drawup, 0.0D).tex((double) ((u + (float) width) * f), (double) ((v + (float) drawup) * f1)).endVertex();
-        vertexbuffer.pos((double) x + drawright, (double) y + drawup, 0.0D).tex((double) ((u + (float) drawright)* f), (double) ((v + (float) drawup) * f1)).endVertex();
+        vertexbuffer.pos((double) x + drawright, y + height, 0.0D).tex((u + drawright) * f, (v + (float) height) * f1).endVertex();
+        vertexbuffer.pos(x + width, y + height, 0.0D).tex((u + (float) width) * f, (v + (float) height) * f1).endVertex();
+        vertexbuffer.pos(x + width, (double) y + drawup, 0.0D).tex((u + (float) width) * f, (v + drawup) * f1).endVertex();
+        vertexbuffer.pos((double) x + drawright, (double) y + drawup, 0.0D).tex((u + drawright) * f, (v + drawup) * f1).endVertex();
         tessellator.draw();
     }
 }

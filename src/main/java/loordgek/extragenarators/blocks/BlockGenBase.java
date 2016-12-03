@@ -5,7 +5,7 @@ import loordgek.extragenarators.GuiHander;
 import loordgek.extragenarators.enums.EnumGenarator;
 import loordgek.extragenarators.tile.TileFurnaceGen;
 import loordgek.extragenarators.tile.TileMain;
-import loordgek.extragenarators.util.lookup.IVariantLookup;
+import loordgek.extragenarators.util.IVariantLookup;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -28,6 +28,7 @@ import java.util.List;
 
 public class BlockGenBase extends BlockMain implements IVariantLookup {
     private final static PropertyEnum<EnumGenarator> genmeta = PropertyEnum.create("genmeta", EnumGenarator.class);
+
 
     public BlockGenBase() {
         this.setCreativeTab(CreativeTabs.FOOD);
@@ -67,12 +68,9 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
                     case 2:
                         playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.endergengui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
                 }
-
             } else
                 playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.upgradegui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
-
-
         return true;
     }
 
@@ -125,4 +123,3 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
         return strings;
     }
 }
-

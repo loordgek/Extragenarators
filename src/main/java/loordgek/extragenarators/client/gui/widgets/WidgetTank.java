@@ -2,8 +2,8 @@ package loordgek.extragenarators.client.gui.widgets;
 
 import loordgek.extragenarators.client.RenderUtils;
 import loordgek.extragenarators.client.gui.GuiExtragenarators;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,7 +24,7 @@ public class WidgetTank extends WidgetBase {
     }
 
     @Override
-    public void addTooltip(int mouseX, int mouseY, List<String> tooltips, boolean shift) {
+    public void addTooltip(int mouseX, int mouseY, List<String> tooltips, boolean shift, EntityPlayer player) {
         if (tank.getFluid() != null && tank.getFluid().getFluid() != null) {
             EnumRarity r = tank.getFluid().getFluid().getRarity(tank.getFluid());
             tooltips.add((r != null && r.rarityColor != null ? r.rarityColor : EnumRarity.COMMON.rarityColor) + tank.getFluid().getLocalizedName());
