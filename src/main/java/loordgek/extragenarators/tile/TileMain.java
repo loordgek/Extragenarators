@@ -86,9 +86,7 @@ public class TileMain extends TileEntity implements ITickable, IDescSync {
 
     public void update2secClientSide() {}
 
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack){
-
-    }
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack){}
 
     @Override
     public Type getSyncType() {
@@ -106,18 +104,13 @@ public class TileMain extends TileEntity implements ITickable, IDescSync {
         return descriptionFields;
     }
 
-    public void onGuiUpdate() {
-    }
+    public void onGuiUpdate() {}
 
     @Override
-    public void writeToPacket(NBTTagCompound tag) {
-
-    }
+    public void writeToPacket(NBTTagCompound tag) {}
 
     @Override
-    public void readFromPacket(NBTTagCompound tag) {
-
-    }
+    public void readFromPacket(NBTTagCompound tag) {}
 
     @Override
     public int getX() {
@@ -135,7 +128,5 @@ public class TileMain extends TileEntity implements ITickable, IDescSync {
     }
 
     @Override
-    public void onDescUpdate() {
-
-    }
+    public void onDescUpdate() {}
 }

@@ -70,7 +70,7 @@ public abstract class ContainerExtragenarators<Tile extends TileGenBase> extends
         }
     }
 
-    protected void sendToCrafters(IMessage message) {
+    private void sendToCrafters(IMessage message) {
         for (IContainerListener crafter : listeners) {
             if (crafter instanceof EntityPlayerMP) {
                 NetworkHandler.SentTo(message, (EntityPlayerMP) crafter);
@@ -78,18 +78,18 @@ public abstract class ContainerExtragenarators<Tile extends TileGenBase> extends
         }
     }
 
-    protected void addSyncField(SyncField field) {
+    private void addSyncField(SyncField field) {
         syncFields.add(field);
         field.setLazy(false);
     }
 
-    protected void addSyncFields(Object annotatedObject) {
+    private void addSyncFields(Object annotatedObject) {
         List<SyncField> fields = NetworkUtils.getSyncFields(annotatedObject, GuiSync.class);
         for (SyncField field : fields)
             addSyncField(field);
     }
 
-
+    @SuppressWarnings("unchecked")
     public void Updatefield(int index, Object value) {
         syncFields.get(index).setValue(value);
         if (te != null) te.onGuiUpdate();
@@ -139,7 +139,6 @@ public abstract class ContainerExtragenarators<Tile extends TileGenBase> extends
                 if (!this.dragSlots.isEmpty()) {
                     ItemStack itemstack3 = inventoryplayer.getItemStack().copy();
                     int j = inventoryplayer.getItemStack().stackSize;
-                    boolean update = true;
 
                     for (Slot slot1 : this.dragSlots) {
                         if (slot1 != null && canAddItemToSlot(slot1, inventoryplayer.getItemStack(), true) && slot1.isItemValid(inventoryplayer.getItemStack()) && inventoryplayer.getItemStack().stackSize >= this.dragSlots.size() && this.canDragIntoSlot(slot1)) {
@@ -158,12 +157,10 @@ public abstract class ContainerExtragenarators<Tile extends TileGenBase> extends
                             j -= itemstack1.stackSize - k;
                             slot1.putStack(itemstack1);
                             if (slot1 instanceof SlotItemHandler) {
-                                if (update) {
-                                    if (((SlotItemHandler) slot1).getItemHandler() instanceof IUpdateItemHander) {
-                                        IItemHandler itemHandler = ((SlotItemHandler) slot1).getItemHandler();
-                                        ((IUpdateItemHander) itemHandler).UpdateItemHandler();
+                                if (((SlotItemHandler) slot1).getItemHandler() instanceof IUpdateItemHander) {
+                                    IItemHandler itemHandler = ((SlotItemHandler) slot1).getItemHandler();
+                                    ((IUpdateItemHander) itemHandler).UpdateItemHandler();
 
-                                    }
                                 }
                             }
                         }
@@ -312,14 +309,10 @@ public abstract class ContainerExtragenarators<Tile extends TileGenBase> extends
 
                                 itemstack9.stackSize += j2;
                                 if (slot7 instanceof SlotItemHandler) {
-                                    boolean update = true;
-                                    if (update) {
-                                        if (((SlotItemHandler) slot7).getItemHandler() instanceof IUpdateItemHander) {
-                                            IItemHandler itemHandler = ((SlotItemHandler) slot7).getItemHandler();
-                                            ((IUpdateItemHander) itemHandler).UpdateItemHandler();
+                                    if (((SlotItemHandler) slot7).getItemHandler() instanceof IUpdateItemHander) {
+                                        IItemHandler itemHandler = ((SlotItemHandler) slot7).getItemHandler();
+                                        ((IUpdateItemHander) itemHandler).UpdateItemHandler();
 
-                                        }
-                                        update = false;
                                     }
                                 }
                             } else if (itemstack12.stackSize <= slot7.getItemStackLimit(itemstack12)) {

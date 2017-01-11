@@ -1,7 +1,6 @@
 package loordgek.extragenarators.client;
 
 import loordgek.extragenarators.client.gui.widgets.WidgetBase;
-import loordgek.extragenarators.util.LogHelper;
 import loordgek.extragenarators.util.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -76,7 +75,7 @@ public class RenderUtils {
 
                 Tessellator tessellator = Tessellator.getInstance();
                 VertexBuffer tes = tessellator.getBuffer();
-                tes.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+                tes.begin(7, DefaultVertexFormats.POSITION_TEX);
                 tes.pos(drawX, drawY + drawHeight, 0).tex(minU, minV + (maxV - minV) * drawHeight / 16F).endVertex();
                 tes.pos(drawX + drawWidth, drawY + drawHeight, 0).tex(minU + (maxU - minU) * drawWidth / 16F, minV + (maxV - minV) * drawHeight / 16F).endVertex();
                 tes.pos(drawX + drawWidth, drawY, 0).tex(minU + (maxU - minU) * drawWidth / 16F, minV).endVertex();
@@ -120,7 +119,7 @@ public class RenderUtils {
         Gui.drawModalRectWithCustomSizedTexture(widgetBase.x, widgetBase.y, 0, 0, widgetBase.width, widgetBase.height, widgetBase.width, widgetBase.height);
     }
 
-    public static void drawWidgetStaticoffset(WidgetBase widgetBase, ResourceLocation location, int X, int Y) {
+    public static void drawWidgetStaticOffset(WidgetBase widgetBase, ResourceLocation location, int X, int Y) {
         getTextureManager().bindTexture(location);
         Gui.drawModalRectWithCustomSizedTexture(widgetBase.x + X, widgetBase.y + Y, 0, 0, widgetBase.width, widgetBase.height, widgetBase.width, widgetBase.height);
     }

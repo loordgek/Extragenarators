@@ -1,6 +1,7 @@
 package loordgek.extragenarators.util;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.net.URISyntaxException;
@@ -22,6 +23,8 @@ public class JavaUtil {
         }
         return fieldList;
     }
+
+    @Nullable
     public static String getsourcepath(@Nonnull Class<?> clazz, int numberstogoupadirectory) {
         URL fileUrl = clazz.getProtectionDomain().getCodeSource().getLocation();
         File file = null;
@@ -31,9 +34,8 @@ public class JavaUtil {
             e.printStackTrace();
         }
         for (int i = 0; i < numberstogoupadirectory; i++) {
-           file = file.getParentFile();
+            file = file != null ? file.getParentFile() : null;
         }
-        return file.getParentFile().getParent();
+        return file != null ? file.getParentFile().getParent() : null;
     }
-
 }

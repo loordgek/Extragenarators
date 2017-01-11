@@ -1,6 +1,5 @@
 package loordgek.extragenarators.nbt;
 
-import loordgek.extragenarators.util.LogHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
@@ -8,7 +7,6 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fluids.FluidTank;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 
 public class NBTUtil {

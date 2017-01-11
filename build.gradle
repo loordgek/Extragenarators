@@ -17,6 +17,9 @@ version = "1.0-SNAPSHOT"
 group = "loordgek"
 archivesBaseName = "extragenarators"
 
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
 minecraft {
     version = "1.10.2-12.18.2.2118"
     runDir = "run"

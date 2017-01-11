@@ -4,6 +4,9 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class InventoryUtil {
     public static ItemStack[] getStacks(IItemHandler itemHandler) {
         ItemStack[] stacks = new ItemStack[itemHandler.getSlots()];
@@ -77,7 +80,7 @@ public class InventoryUtil {
 
         }
         return null;
-    }
+    }*/
     public static ItemStack[] condenseStacks(ItemStack[] stacks) {
     List<ItemStack> condensed = new ArrayList<ItemStack>();
 
@@ -105,6 +108,7 @@ public class InventoryUtil {
 
     return condensed.toArray(new ItemStack[condensed.size()]);
     }
+
     public static int containsSets(ItemStack[] set, ItemStack[] stock, boolean oreDictionary) {
         int totalSets = 0;
 
@@ -117,7 +121,7 @@ public class InventoryUtil {
             for (ItemStack offer : condensedOffered) {
                 if (IsItemStackEqual(req, offer)) {
                     int stackCount = (int) Math.floor(offer.stackSize / req.stackSize);
-                    reqCount = Math.Max(reqCount, stackCount);
+                    reqCount = Math.max(reqCount, stackCount);
                 }
             }
 
@@ -131,7 +135,7 @@ public class InventoryUtil {
         }
 
         return totalSets;
-    }*/
+    }
     public static boolean IsItemStackEqual(ItemStack stack1, ItemStack stack2) {
         return !(stack1 == null || stack2 == null) && stack1.isItemEqual(stack2) && stack1.getTagCompound() == stack2.getTagCompound();
 

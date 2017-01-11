@@ -2,7 +2,8 @@ package loordgek.extragenarators.network;
 
 import loordgek.extragenarators.Extragenarators;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraft.util.IThreadListener;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -10,19 +11,32 @@ import net.minecraftforge.fml.relauncher.Side;
 *    PneumaticCraft code. author = MineMaarten
 *    https://github.com/MineMaarten/PneumaticCraft
 */
-public abstract class AbstractPacket <REQ extends IMessage> implements IMessage ,IMessageHandler<REQ, REQ> {
+public abstract class AbstractPacket <REQ extends IThreadSafeMessage> implements IThreadSafeMessage ,IMessageHandler<REQ, REQ> {
 
     @Override
     public  REQ onMessage(REQ message, MessageContext ctx) {
         if(ctx.side == Side.SERVER) {
-            handleServerSide(message, ctx.getServerHandler().playerEntity);
+            EntityPlayer player = ctx.getServerHandler().playerEntity;
+            if (message.isThreadSafe()){
+                handleServerSide(message, player, true);
+            }
+            else {
+                IThreadListener serverside = (WorldServer)player.worldObj;
+                serverside.addScheduledTask(() -> handleServerSide(message, player, false));
+            }
         } else {
-            handleClientSide(message, Extragenarators.proxy.getclientplayer());
+            if (message.isThreadSafe()){
+                handleClientSide(message, Extragenarators.proxy.getclientplayer(), true);
+            }
+            else {
+                IThreadListener clientside = Extragenarators.proxy.getMinecraft();
+                clientside.addScheduledTask(() -> handleClientSide(message, Extragenarators.proxy.getclientplayer(), false));
+            }
         }
         return null;
     }
 
-    public abstract void handleClientSide(REQ message, EntityPlayer player);
+    public abstract void handleClientSide(REQ message, EntityPlayer player, boolean handledFromNettyThread);
 
-    public abstract void handleServerSide(REQ message, EntityPlayer player);
+    public abstract void handleServerSide(REQ message, EntityPlayer player, boolean handledFromNettyThread);
 }

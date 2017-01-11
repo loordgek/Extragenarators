@@ -18,14 +18,15 @@ public enum EnumGenarator implements IStringSerializable {
 
     private final String name;
     private final int meta;
+
     EnumGenarator(String name, int meta) {
         this.name = name;
         this.meta = meta;
     }
+
     public static int getlenth(){
         return EnumGenarator.values().length;
     }
-
 
     public static EnumGenarator byMeta(int meta) {
         if (meta < 0 || meta >= EnumLookup.length) {

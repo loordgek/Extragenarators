@@ -1,5 +1,7 @@
 package loordgek.extragenarators.util;
 
 public interface IVariantLookup {
-    String[] variantnames();
+  default String[] variantnames(){
+      return new String[]{"inventory"};
+  }
 }

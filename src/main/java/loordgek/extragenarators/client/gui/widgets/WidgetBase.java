@@ -16,25 +16,17 @@ public class WidgetBase{
     public final int y;
     public final int width;
     public final int height;
-    public final int u;
-    public final int v;
     public final GuiExtragenarators gui;
     public boolean enabled = true;
     public boolean playSound = true;
 
-    public WidgetBase(int id, int x, int y, int u, int v, int width, int height, GuiExtragenarators gui) {
+    public WidgetBase(int id, int x, int y, int width, int height, GuiExtragenarators gui) {
         this.id = id;
         this.x = x + gui.getguileft();
         this.y = y + gui.getguitop();
-        this.u = u;
-        this.v = v;
         this.width = width;
         this.height = height;
         this.gui = gui;}
-
-    public WidgetBase(int id, int x, int y, int width, int height, GuiExtragenarators gui) {
-        this(id, x, y, 0, 0, width, height, gui);
-    }
 
     public void render(int mouseX, int mouseY) {}
 

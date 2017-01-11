@@ -248,8 +248,6 @@ public abstract class SyncField<T> {
         protected void setValueForArray(Object array, int index, ItemStack value) throws Exception {
             ((ItemStack[]) array)[index] = value;
         }
-
-
     }
 
     public static class FluidStackfieldsync extends SyncField<FluidStack> {

@@ -29,15 +29,9 @@ import java.util.List;
 public class BlockGenBase extends BlockMain implements IVariantLookup {
     private final static PropertyEnum<EnumGenarator> genmeta = PropertyEnum.create("genmeta", EnumGenarator.class);
 
-
     public BlockGenBase() {
         this.setCreativeTab(CreativeTabs.FOOD);
         this.setDefaultState(this.blockState.getBaseState().withProperty(genmeta, EnumGenarator.byMeta(0)));
-    }
-
-    @Override
-    public BlockMain getblock() {
-        return new BlockGenBase();
     }
 
     @Override

@@ -16,7 +16,7 @@ public class ClientProxy implements IProxy {
 
     @Override
     public EntityPlayer getclientplayer() {
-        return Minecraft.getMinecraft().thePlayer;
+        return getMinecraft().thePlayer;
     }
 
     @Override
@@ -27,6 +27,11 @@ public class ClientProxy implements IProxy {
     @Override
     public void setCustomModelResourceLocationitem(Item item, int meta, ModelResourceLocation location) {
         ModelLoader.setCustomModelResourceLocation(item, meta, location);
+    }
+
+    @Override
+    public Minecraft getMinecraft() {
+        return Minecraft.getMinecraft();
     }
 
 }

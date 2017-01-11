@@ -2,7 +2,6 @@ package loordgek.extragenarators.client.gui.widgets;
 
 import loordgek.extragenarators.client.RenderUtils;
 import loordgek.extragenarators.client.gui.GuiExtragenarators;
-import loordgek.extragenarators.util.ForgePower;
 import loordgek.extragenarators.util.MathUtil;
 import loordgek.extragenarators.util.PowerUtil;
 import net.minecraft.entity.player.EntityPlayer;

@@ -12,8 +12,12 @@ import loordgek.extragenarators.util.item.InventoryUtil;
 import loordgek.extragenarators.util.item.UpgradeInv;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+
+import javax.annotation.Nullable;
 
 public class TileGenBase extends TileMain implements IInventoryOnwer, IFire {
     @NBTSave @GuiSync public int upgradepowercapacity;
@@ -25,7 +29,6 @@ public class TileGenBase extends TileMain implements IInventoryOnwer, IFire {
     @NBTSave @GuiSync public double currentburntime;
     @GuiSync public boolean isburing;
     public int forgepower = 10;
-
     @NBTSave @GuiSync public ForgePower power = new ForgePower(50000);
 
     @NBTSave public UpgradeInv upgradeinv = new UpgradeInv(64, 8, "upgrade", this);
@@ -77,6 +80,18 @@ public class TileGenBase extends TileMain implements IInventoryOnwer, IFire {
             LogHelper.info("hello");
             ReCalculateUpgrade();
         }
+    }
+
+    @Nullable
+    @Override
+    public World getWord() {
+        return worldObj;
+    }
+
+    @Nullable
+    @Override
+    public BlockPos getBlockPos() {
+        return getPos();
     }
 
     @Override

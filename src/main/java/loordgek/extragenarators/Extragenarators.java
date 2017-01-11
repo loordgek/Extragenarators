@@ -18,6 +18,7 @@ import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.io.IOException;
 
@@ -53,10 +54,12 @@ public class Extragenarators {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHander());
         NetworkHandler.initNetwork();
         LogHelper.info(JavaUtil.getsourcepath(this.getClass(), 5));
-        try {
-            BlockStateGenerator.BlocktateGeneratorforgeV1("C://Modding/forge", Reference.MODINFO.MOD_ID, "genaratorbase", Blocks.GEN);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (event.getSide() == Side.CLIENT){
+            try {
+                BlockStateGenerator.BlocktateGeneratorforgeV1("C://Modding/forge", Reference.MODINFO.MOD_ID, "genaratorbase", Blocks.GEN);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

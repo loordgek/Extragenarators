@@ -1,9 +1,6 @@
 package loordgek.extragenarators.container.slot;
 
 import loordgek.extragenarators.api.IUpgradeItem;
-import loordgek.extragenarators.container.container.ContainerExtragenarators;
-import loordgek.extragenarators.enums.EnumInvFlow;
-import loordgek.extragenarators.util.LogHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
