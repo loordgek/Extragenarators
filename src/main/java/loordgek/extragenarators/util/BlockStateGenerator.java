@@ -22,21 +22,23 @@ public class BlockStateGenerator {
     public static void BlocktateGeneratorforgeV1(String path, String modid, String fileName, Block block) throws IOException {
         File json = new File(path + "/assets/" + modid + "/blockstates/" + fileName + ".json");
         File folders = new File(path + "/assets/" + modid + "/blockstates/");
-        folders.mkdir();
+
+        folders.mkdirs();
+
+        if (!json.exists()){
+            json.createNewFile();
+        }
 
         ImmutableMap<IProperty<?>, Comparable<?>> properties = block.getBlockState().getBaseState().getProperties();
-        if (json.exists()) {
-            json.delete();
-        }
 
         JsonWriter jsonWriter = new JsonWriter(new FileWriter(json));
         jsonWriter.setIndent("    ");
         jsonWriter.setLenient(false);
         jsonWriter.beginObject();
         jsonWriter.name("forge_marker").value(1);
-        jsonWriter.name("defaults").beginObject();
-        jsonWriter.endObject();
+        jsonWriter.name("defaults").beginObject().endObject();
         jsonWriter.name("variants").beginObject();
+        jsonWriter.name("inventory").beginObject().endObject();
         for (IProperty<?> property : properties.keySet()) {
             WriteProperty(property, jsonWriter);
         }
@@ -49,9 +51,7 @@ public class BlockStateGenerator {
         jsonWriter.name(property.getName());
         jsonWriter.beginObject();
         for (Object object : property.getAllowedValues().toArray()) {
-            jsonWriter.name(object.toString());
-            jsonWriter.beginObject();
-            jsonWriter.endObject();
+            jsonWriter.name(object.toString()).beginObject().endObject();
         }
         jsonWriter.endObject();
     }

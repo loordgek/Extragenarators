@@ -2,7 +2,6 @@ package loordgek.extragenarators.container.container;
 
 import com.google.common.collect.Sets;
 import loordgek.extragenarators.network.*;
-import loordgek.extragenarators.tile.TileGenBase;
 import loordgek.extragenarators.util.item.IUpdateItemHander;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -26,7 +25,7 @@ import java.util.Set;
 *    PneumaticCraft code. author = MineMaarten
 *    https://github.com/MineMaarten/PneumaticCraft
 */
-public abstract class ContainerExtragenarators<Tile extends TileGenBase> extends Container {
+public abstract class ContainerExtragenarators<Tile extends IContainerGuiSync> extends Container{
     public Tile te;
 
     /**
@@ -58,6 +57,14 @@ public abstract class ContainerExtragenarators<Tile extends TileGenBase> extends
         }
     }
 
+    protected void addSlotListToContainer(IItemHandler handler, int x, int y, int rows, int collums){
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < collums; j++) {
+                addSlotToContainer(new SlotItemHandler(handler, j + i + rows, x + j * 18, y + i *18));
+            }
+        }
+    }
+
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
@@ -65,8 +72,6 @@ public abstract class ContainerExtragenarators<Tile extends TileGenBase> extends
             if (syncFields.get(i).update()) {
                 sendToCrafters(new GuiSyncPacket(i, syncFields.get(i)));
             }
-
-
         }
     }
 
@@ -93,10 +98,6 @@ public abstract class ContainerExtragenarators<Tile extends TileGenBase> extends
     public void Updatefield(int index, Object value) {
         syncFields.get(index).setValue(value);
         if (te != null) te.onGuiUpdate();
-    }
-
-    public boolean isRemote() {
-        return te.getWorld().isRemote;
     }
 
     @Override

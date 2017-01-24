@@ -5,6 +5,7 @@ import loordgek.extragenarators.container.container.ContainerExtragenarators;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -150,22 +151,22 @@ public class GuiSyncPacket extends AbstractPacket<GuiSyncPacket> {
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
-        syncId = buf.readInt();
-        type = buf.readByte();
-        value = readField(buf, type);
-    }
-
-    @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(syncId);
-        buf.writeByte(type);
-        writeField(buf, value, type);
-    }
-
-    @Override
     public boolean isThreadSafe() {
         return isTypeThreadSafe(type);
+    }
+
+    @Override
+    public void toPacketbuf(PacketBuffer buffer) {
+        buffer.writeInt(syncId);
+        buffer.writeByte(type);
+        writeField(buffer, value, type);
+    }
+
+    @Override
+    public void fromPacketbuf(PacketBuffer buffer) {
+        syncId = buffer.readInt();
+        type = buffer.readByte();
+        value = readField(buffer, type);
     }
 
     @Override
@@ -177,7 +178,6 @@ public class GuiSyncPacket extends AbstractPacket<GuiSyncPacket> {
     }
 
     @Override
-    public void handleServerSide(GuiSyncPacket message, EntityPlayer player, boolean handledFromNettyThread) {
-    }
+    public void handleServerSide(GuiSyncPacket message, EntityPlayer player, boolean handledFromNettyThread) {}
 }
 

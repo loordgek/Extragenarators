@@ -3,6 +3,7 @@
     "defaults": {},
     "variants": {
         "genmeta": {
+            "inventory": {},
             "furnace": {
                 "modek":"extragenarators:coblegen"
             },

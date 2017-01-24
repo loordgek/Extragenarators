@@ -11,19 +11,15 @@ public class MathUtil {
 
     public static double scale(int currentint, int maxint, int size) {
         if (maxint == 0) return 0;
-        //LogHelper.info(currentint + " current " + maxint + " max " + size + " size " + current + " return ");
         return currentint * size / maxint;
     }
 
     public static double scalereverse(double currentint, double maxint, double size) {
         if (maxint == 0) return 0;
-        //LogHelper.info(currentint + " current " + maxint + " max " + size + " size " + reverseNumber + " return ");
         return (reverseNumber(currentint, 0, maxint) * size / maxint);
     }
 
     public static double reverseNumber(double num, double min, double max) {
         return (max + min) - num;
     }
-
-
 }

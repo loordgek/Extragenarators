@@ -9,8 +9,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum EnumBlocks {
     FURNACEGENBLOCK(Blocks.GEN, Blocks.GenITEM, "genaratorbase", Blocks.GEN);
@@ -41,7 +39,6 @@ public enum EnumBlocks {
         iForgeRegistry.register(itemBlock);
     }
 
-    @SideOnly(Side.CLIENT)
     public void RegisterRender() {
         for (int i = 0; i < lookup.variantnames().length; i++) {
             ModelResourceLocation modelResourceLocation = new ModelResourceLocation(Reference.RESOURCE.RESOURCE_PREFIX + name, lookup.variantnames()[i]);

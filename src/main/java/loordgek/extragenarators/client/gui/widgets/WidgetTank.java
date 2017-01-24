@@ -17,6 +17,7 @@ public class WidgetTank extends WidgetBase {
         super(id, x, y, width, height, gui);
         this.tank = tank;
     }
+
     @Override
     public void render(int mouseX, int mouseY) {
         if (tank.getFluidAmount() > 0)

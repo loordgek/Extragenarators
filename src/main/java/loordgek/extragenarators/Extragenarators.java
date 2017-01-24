@@ -1,7 +1,6 @@
 package loordgek.extragenarators;
 
 import loordgek.extragenarators.blocks.Blocks;
-import loordgek.extragenarators.event.CommenEventHandler;
 import loordgek.extragenarators.init.InitTile;
 import loordgek.extragenarators.network.NetworkHandler;
 import loordgek.extragenarators.proxy.IProxy;
@@ -9,7 +8,6 @@ import loordgek.extragenarators.ref.Reference;
 import loordgek.extragenarators.util.BlockStateGenerator;
 import loordgek.extragenarators.util.JavaUtil;
 import loordgek.extragenarators.util.LogHelper;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -43,13 +41,11 @@ public class Extragenarators {
     @EventHandler
     public void fingerprint(FMLFingerprintViolationEvent event) {
         LogHelper.info("fingerprint");
-        MinecraftForge.EVENT_BUS.register(new CommenEventHandler());
     }
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
         LogHelper.info("preinit");
-        proxy.preinit(event);
         InitTile.Init();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHander());
         NetworkHandler.initNetwork();

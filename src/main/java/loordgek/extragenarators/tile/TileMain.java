@@ -1,5 +1,6 @@
 package loordgek.extragenarators.tile;
 
+import loordgek.extragenarators.container.container.IContainerGuiSync;
 import loordgek.extragenarators.nbt.NBTSave;
 import loordgek.extragenarators.nbt.NBTUtil;
 import loordgek.extragenarators.network.DescSync;
@@ -21,7 +22,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileMain extends TileEntity implements ITickable, IDescSync {
+public class TileMain extends TileEntity implements ITickable, IDescSync, IContainerGuiSync {
     private List<Field> NBTfieldlist = new ArrayList<Field>();
     private List<SyncField> descriptionFields;
     private int timer;
@@ -30,10 +31,8 @@ public class TileMain extends TileEntity implements ITickable, IDescSync {
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         try {
-            NBTUtil.getFieldsread(this, compound.getCompoundTag("InterfaceCall"));
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
+            NBTUtil.getFieldsread(this, compound.getCompoundTag("fieldNBTsafe"));
+        } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
         }
         LogHelper.info(compound);
@@ -47,7 +46,7 @@ public class TileMain extends TileEntity implements ITickable, IDescSync {
         try {
             if (NBTUtil.getFieldswrite(this, NBTfieldlist) != null) {
                 try {
-                    compound.setTag("InterfaceCall", NBTUtil.getFieldswrite(this, NBTfieldlist));
+                    compound.setTag("fieldNBTsafe", NBTUtil.getFieldswrite(this, NBTfieldlist));
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }

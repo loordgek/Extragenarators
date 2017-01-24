@@ -1,8 +1,7 @@
 {
-	"__comment": "Designed by Stefan9999 with Cubik Studio - https://cubik.studio",
 	"textures": {
 		"particle": "blocks/e_particle",
-		"texture": "minecraft:cobblestone"
+		"texture": "minecraft:blocks/cobblestone"
 	},
 	"elements": [
 		{

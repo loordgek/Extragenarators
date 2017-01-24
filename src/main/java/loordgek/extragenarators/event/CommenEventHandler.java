@@ -6,18 +6,20 @@ import loordgek.extragenarators.util.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@Mod.EventBusSubscriber
 public class CommenEventHandler {
     @SubscribeEvent
-    public void onRegistryRegisterBlocks(RegistryEvent.Register<Block> event) {
+    public static void onRegistryRegisterBlocks(RegistryEvent.Register<Block> event) {
         for (EnumBlocks enumBlocks : EnumBlocks.values()) {
             enumBlocks.RegisterBlock(event.getRegistry());
         }
     }
 
     @SubscribeEvent
-    public void onRegistryRegisterItems(RegistryEvent.Register<Item> event) {
+    public static void onRegistryRegisterItems(RegistryEvent.Register<Item> event) {
         LogHelper.info(event);
         for (EnumBlocks enumBlocks : EnumBlocks.values()) {
             enumBlocks.RegisterItemBlock(event.getRegistry());

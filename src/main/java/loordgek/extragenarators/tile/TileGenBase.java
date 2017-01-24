@@ -20,11 +20,11 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import javax.annotation.Nullable;
 
 public class TileGenBase extends TileMain implements IInventoryOnwer, IFire {
-    @NBTSave @GuiSync public int upgradepowercapacity;
-    @NBTSave @GuiSync public int upgrademultiplier;
-    @NBTSave @GuiSync public float maxmultiplier;
-    @NBTSave @GuiSync public float runspeed;
-    @NBTSave @GuiSync public float upgradespeed;
+    @GuiSync public int upgradepowercapacity;
+    @GuiSync public int upgrademultiplier;
+    @GuiSync public float maxmultiplier;
+    @GuiSync public float runspeed;
+    @GuiSync public float upgradespeed;
     @NBTSave @GuiSync public double burntime;
     @NBTSave @GuiSync public double currentburntime;
     @GuiSync public boolean isburing;

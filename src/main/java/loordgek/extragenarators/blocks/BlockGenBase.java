@@ -4,7 +4,6 @@ import loordgek.extragenarators.Extragenarators;
 import loordgek.extragenarators.GuiHander;
 import loordgek.extragenarators.enums.EnumGenarator;
 import loordgek.extragenarators.tile.TileFurnaceGen;
-import loordgek.extragenarators.tile.TileMain;
 import loordgek.extragenarators.util.IVariantLookup;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -70,9 +69,9 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        assert (tileEntity) != null;
-        ((TileMain) tileEntity).onBlockPlacedBy(worldIn, pos, state, placer, stack);
+//        TileEntity tileEntity = worldIn.getTileEntity(pos);
+//        assert (tileEntity) != null;
+//        ((TileMain) tileEntity).onBlockPlacedBy(worldIn, pos, state, placer, stack);
     }
 
     @SideOnly(Side.CLIENT)
