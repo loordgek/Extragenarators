@@ -3,13 +3,10 @@
     "defaults": {},
     "variants": {
         "genmeta": {
-            "inventory": {},
             "furnace": {
-                "modek":"extragenarators:coblegen"
+                "model":"extragenarators:coblegen"
             },
-            "lava": {
-
-            }
+            "lava": {}
         }
     }
 }

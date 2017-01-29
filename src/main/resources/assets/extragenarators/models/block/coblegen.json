@@ -1,6 +1,6 @@
 {
 	"textures": {
-		"particle": "blocks/e_particle",
+		"particle": "extragenarators:blocks/e_particle",
 		"texture": "minecraft:blocks/cobblestone"
 	},
 	"elements": [

@@ -12,10 +12,11 @@ import net.minecraftforge.fml.relauncher.Side;
 *    https://github.com/MineMaarten/PneumaticCraft
 */
 public class NetworkHandler {
+    private static int NetID;
     private static final SimpleNetworkWrapper INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MODINFO.MOD_NAME);
 
     public static void initNetwork(){
-        INSTANCE.registerMessage(GuiSyncPacket.class, GuiSyncPacket.class, 0, Side.CLIENT);
+        INSTANCE.registerMessage(GuiSyncPacket.class, GuiSyncPacket.class, ++NetID, Side.CLIENT);
     }
 
     public static void SentTo(IMessage message, EntityPlayerMP playerMP){
