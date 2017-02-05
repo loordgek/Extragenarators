@@ -33,12 +33,12 @@ public enum EnumItems {
 
     public void RegisterRender()  {
         for (int i = 0; i < lookup.variantnames().length; i++) {
-            ModelResourceLocation modelResourceLocation = new ModelResourceLocation(item.getRegistryName(), lookup.variantnames()[i]);
+            ModelResourceLocation modelResourceLocation = new ModelResourceLocation(item.getRegistryName() +"_" + lookup.variantnames()[i], "inventory");
             Extragenarators.proxy.setCustomModelResourceLocationitem(item, i, modelResourceLocation);
             LogHelper.info(modelResourceLocation.toString());
         }
         try {
-            BasicItemJsonGen.genItemJson("C://Modding/forge", Reference.MODINFO.MOD_ID, name , lookup);
+            BasicItemJsonGen.genItemJson2("C://Modding/forge", Reference.MODINFO.MOD_ID, name , lookup);
         } catch (IOException e) {
             e.printStackTrace();
         }

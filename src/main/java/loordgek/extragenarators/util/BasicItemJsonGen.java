@@ -11,16 +11,15 @@ public class BasicItemJsonGen {
     public static void genItemJson(String path, String modid, String fileName, IVariantLookup lookup) throws IOException {
         File folder = new File(path + "/assets/" + modid + "/models/item/");
         File json = new File(path + "/assets/" + modid + "/models/item/" + fileName + ".json");
+
         folder.mkdirs();
-
-        if (!json.exists()) {
-            json.createNewFile();
-        }
-
 
         JsonWriter jsonWriter = new JsonWriter(new FileWriter(json));
         jsonWriter.setIndent("    ");
         jsonWriter.setLenient(true);
+
+
+
 
         jsonWriter.beginObject();
         jsonWriter.name("parent").value("item/generated");
@@ -35,5 +34,27 @@ public class BasicItemJsonGen {
         jsonWriter.endObject();
         jsonWriter.endObject();
         jsonWriter.close();
+    }
+    public static void genItemJson2(String path, String modid, String fileName, IVariantLookup lookup) throws IOException{
+        File folder = new File(path + "/assets/" + modid + "/models/item/");
+        folder.mkdir();
+
+        for (String lookup1 : lookup.variantnames()){
+            File json = new File(path + "/assets/" + modid + "/models/item/" + fileName + "_" + lookup1 + ".json");
+            JsonWriter jsonWriter = new JsonWriter(new FileWriter(json));
+            jsonWriter.setIndent("    ");
+            jsonWriter.setLenient(true);
+
+            jsonWriter.beginObject();
+            jsonWriter.name("parent").value("item/generated");
+            jsonWriter.name("textures").beginObject();
+            jsonWriter.name("layer0").value(modid + ":items/");
+            jsonWriter.endObject();
+            jsonWriter.endObject();
+            jsonWriter.close();
+
+        }
+
+
     }
 }

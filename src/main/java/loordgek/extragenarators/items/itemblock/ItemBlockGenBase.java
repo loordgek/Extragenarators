@@ -3,10 +3,11 @@ package loordgek.extragenarators.items.itemblock;
 import loordgek.extragenarators.enums.EnumGenarator;
 import loordgek.extragenarators.ref.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
-public class ItemBlockGenBase extends ItemBlockMain{
+public class ItemBlockGenBase extends ItemBlock {
     public ItemBlockGenBase(Block block) {
         super(block);
         this.setHasSubtypes(true);

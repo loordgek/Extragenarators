@@ -33,18 +33,9 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        name "javax.json"
-        url "https://mvnrepository.com/artifact/org.glassfish/javax.json"
-    }
-}
+repositories {}
 
-dependencies {
-    compile "org.projectlombok:lombok:1.16.10"
-    compile group: 'org.glassfish', name: 'javax.json', version: '1.0.4'
-}
+dependencies {}
 
 jar {
 

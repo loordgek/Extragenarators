@@ -1,9 +1,9 @@
 package loordgek.extragenarators.blocks;
 
 import loordgek.extragenarators.items.itemblock.ItemBlockGenBase;
-import loordgek.extragenarators.items.itemblock.ItemBlockMain;
+import net.minecraft.item.ItemBlock;
 
 public class Blocks {
     public static final BlockGenBase GEN = new BlockGenBase();
-    public static final ItemBlockMain GenITEM = new ItemBlockGenBase(GEN);
+    public static final ItemBlock GenITEM = new ItemBlockGenBase(GEN);
 }

@@ -1,6 +1,7 @@
 package loordgek.extragenarators.items;
 
 import loordgek.extragenarators.api.IUpgradeItem;
+import loordgek.extragenarators.enums.EnumUpgrade;
 import loordgek.extragenarators.ref.Reference;
 import loordgek.extragenarators.util.IVariantLookup;
 import net.minecraft.creativetab.CreativeTabs;
@@ -76,6 +77,10 @@ public class ItemUpgrade extends ItemMain implements IUpgradeItem, IVariantLooku
 
     @Override
     public String[] variantnames() {
-        return Reference.ITEMS.typeupgrade;
+        String[] strings = new String[EnumUpgrade.values().length];
+        for (int i = 0; i < EnumUpgrade.values().length; i++) {
+            strings[i] = EnumUpgrade.values()[i].getName();
+        }
+        return strings;
     }
 }
