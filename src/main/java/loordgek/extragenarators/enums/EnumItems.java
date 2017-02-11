@@ -8,6 +8,7 @@ import loordgek.extragenarators.util.IVariantLookup;
 import loordgek.extragenarators.util.LogHelper;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
 import java.io.IOException;
@@ -27,20 +28,23 @@ public enum EnumItems {
     }
 
     public void RegisterItem(IForgeRegistry<Item> iForgeRegistry) {
-        item.setRegistryName(Reference.MODINFO.MOD_ID, name);
+        item.setRegistryName(Reference.MODINFO.MOD_ID, name +"lol");
         iForgeRegistry.register(item);
     }
 
     public void RegisterRender()  {
         for (int i = 0; i < lookup.variantnames().length; i++) {
-            ModelResourceLocation modelResourceLocation = new ModelResourceLocation(item.getRegistryName() +"_" + lookup.variantnames()[i], "inventory");
+            ModelResourceLocation modelResourceLocation = new ModelResourceLocation(new ResourceLocation(Reference.RESOURCE.RESOURCE_PREFIX + name +"_M_"+ lookup.variantnames()[i] ), "inventory");
             Extragenarators.proxy.setCustomModelResourceLocationitem(item, i, modelResourceLocation);
             LogHelper.info(modelResourceLocation.toString());
         }
-        try {
-            BasicItemJsonGen.genItemJson2("C://Modding/forge", Reference.MODINFO.MOD_ID, name , lookup);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (Reference.MODINFO.DEVMODE){
+            try {
+                BasicItemJsonGen.genItemJson("C://Modding/forge", Reference.MODINFO.MOD_ID, name , lookup);
+                BasicItemJsonGen.genItemBlockStateJson("C://Modding/forge", Reference.MODINFO.MOD_ID, name , lookup);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         LogHelper.info(item.getRegistryName().toString());
     }
