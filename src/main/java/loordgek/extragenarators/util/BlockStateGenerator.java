@@ -34,6 +34,7 @@ public class BlockStateGenerator {
         JsonWriter jsonWriter = new JsonWriter(new FileWriter(json));
         jsonWriter.setIndent("    ");
         jsonWriter.setLenient(false);
+
         jsonWriter.beginObject();
         jsonWriter.name("forge_marker").value(1);
         jsonWriter.name("defaults").beginObject().endObject();

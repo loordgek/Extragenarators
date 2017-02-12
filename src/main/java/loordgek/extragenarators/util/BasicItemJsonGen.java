@@ -18,17 +18,22 @@ public class BasicItemJsonGen {
         jsonWriter.setIndent("    ");
         jsonWriter.setLenient(true);
 
-
-
-
         jsonWriter.beginObject();
         jsonWriter.name("forge_marker").value(1);
+        jsonWriter.name("defaults");
+        jsonWriter.beginObject();
+        jsonWriter.name("model").value(modid + ":item/generated");
+        jsonWriter.endObject();
         jsonWriter.name("variants").beginObject();
+        jsonWriter.name("variant").beginObject();
         for (String string : lookup.variantnames()){
             jsonWriter.name(string).beginObject();
-            jsonWriter.name("model").value(modid + ":item/" + fileName +"_"+ string);
+            jsonWriter.name("textures").beginObject();
+            jsonWriter.name("layer0").value(modid + ":items/" + string);
+            jsonWriter.endObject();
             jsonWriter.endObject();
         }
+        jsonWriter.endObject();
         jsonWriter.endObject();
         jsonWriter.endObject();
         jsonWriter.close();
