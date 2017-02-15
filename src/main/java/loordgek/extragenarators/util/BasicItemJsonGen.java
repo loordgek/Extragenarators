@@ -25,15 +25,16 @@ public class BasicItemJsonGen {
         jsonWriter.name("model").value(modid + ":item/generated");
         jsonWriter.endObject();
         jsonWriter.name("variants").beginObject();
-        jsonWriter.name("variant").beginObject();
+
         for (String string : lookup.variantnames()){
-            jsonWriter.name(string).beginObject();
+            jsonWriter.name(string).beginArray().beginObject();
             jsonWriter.name("textures").beginObject();
             jsonWriter.name("layer0").value(modid + ":items/" + string);
             jsonWriter.endObject();
             jsonWriter.endObject();
+            jsonWriter.endArray();
         }
-        jsonWriter.endObject();
+
         jsonWriter.endObject();
         jsonWriter.endObject();
         jsonWriter.close();
