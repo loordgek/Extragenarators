@@ -31,7 +31,7 @@ public class WidgetPower extends WidgetBase {
     @Override
     public void render(int mouseX, int mouseY) {
         RenderUtils.drawWidgetStatic(this, powerbarback);
-        RenderUtils.drawWidgetUp(this, powerbar, (int) MathUtil.getpercentagereverse(energyStorage.getEnergyStored() , energyStorage.getMaxEnergyStored()), 100D);
+        RenderUtils.drawWidgetUp(this, powerbar, (int) MathUtil.getpercentagereverse(energyStorage.getEnergyStored() , energyStorage.getMaxEnergyStored()), 100);
     }
 
     @Override
@@ -41,5 +41,10 @@ public class WidgetPower extends WidgetBase {
             tooltips.add(Integer.toString(energyStorage.getMaxEnergyStored()));
         }
         else tooltips.add(energyformat.format(MathUtil.getpercentage(energyStorage.getEnergyStored(), energyStorage.getMaxEnergyStored())) + " &");
+//        tooltips.add(GlStateManager.glGetString(7936));
+//        tooltips.add("");
+//        tooltips.add(GlStateManager.glGetString(7937));
+//        tooltips.add("");
+//        tooltips.add(GlStateManager.glGetString(7938));
     }
 }

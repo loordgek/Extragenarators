@@ -25,11 +25,11 @@ import java.util.Set;
 *    PneumaticCraft code. author = MineMaarten
 *    https://github.com/MineMaarten/PneumaticCraft
 */
-public abstract class ContainerExtragenarators<Tile extends IContainerGuiSync> extends Container{
+public abstract class ContainerExtragenarators<Tile extends IContainerGuiSync> extends Container {
     public Tile te;
 
     /**
-     * The current drag mode (0 : evenly split, 1 : one itemtest by slot, 2 : not used ?)
+     * The current drag mode (0 : evenly split, 1 : one item by slot, 2 : not used ?)
      */
     private int dragMode = -1;
     /**
@@ -38,10 +38,13 @@ public abstract class ContainerExtragenarators<Tile extends IContainerGuiSync> e
     private int dragEvent;
     private final Set<Slot> dragSlots = Sets.newHashSet();
 
-    private final List<SyncField> syncFields = new ArrayList<SyncField>();
+    private final List<SyncField> syncFields = new ArrayList<>();
+    protected final EntityPlayer player;
+    private int timer;
 
     public ContainerExtragenarators(EntityPlayer player, Tile te) {
         this.te = te;
+        this.player = player;
         if (te != null) addSyncFields(te);
     }
 
@@ -51,7 +54,6 @@ public abstract class ContainerExtragenarators<Tile extends IContainerGuiSync> e
                 addSlotToContainer(new Slot(playerInventory, j + i * 9 + 9, x + j * 18, y + i * 18));
             }
         }
-
         for (int i = 0; i < 9; ++i) {
             addSlotToContainer(new Slot(playerInventory, i, x + i * 18, y + 58));
         }
@@ -60,6 +62,9 @@ public abstract class ContainerExtragenarators<Tile extends IContainerGuiSync> e
     @Override
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
+        if (timer < 2)
+            timer++;// this needs to be here. if i start to sync the from the start it does not work
+        else
         for (int i = 0; i < syncFields.size(); i++) {
             if (syncFields.get(i).update()) {
                 sendToCrafters(new GuiSyncPacket(i, syncFields.get(i)));

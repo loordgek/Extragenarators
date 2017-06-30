@@ -2,7 +2,7 @@ package loordgek.extragenarators.client.gui.widgets;
 
 import loordgek.extragenarators.client.RenderUtils;
 import loordgek.extragenarators.client.gui.GuiExtragenarators;
-import loordgek.extragenarators.util.IFire;
+import loordgek.extragenarators.util.Fire;
 import loordgek.extragenarators.util.MathUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -12,8 +12,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class WidgetFire extends WidgetBase {
     private final ResourceLocation firepng = new WidgetResourceLocation("fire");
     private final ResourceLocation firebackpng = new WidgetResourceLocation("fireback");
-    private final IFire fire;
-    public WidgetFire(int id, int x, int y, GuiExtragenarators gui, IFire fire) {
+    private final Fire fire;
+    public WidgetFire(int id, int x, int y, GuiExtragenarators gui, Fire fire) {
         super(id, x, y, 14, 14, gui);
         this.fire = fire;
     }
@@ -21,8 +21,8 @@ public class WidgetFire extends WidgetBase {
     @Override
     public void render(int mouseX, int mouseY) {
         RenderUtils.drawWidgetStatic(this, firebackpng);
-        if (fire.FireCurrent() != 0){
-            RenderUtils.drawWidgetUp(this, firepng, (int) MathUtil.reverseNumber(fire.FireCurrent(), 0, fire.FireMax()), fire.FireMax());
+        if (fire.getFirecurrent() != 0){
+            RenderUtils.drawWidgetUp(this, firepng, (int) MathUtil.reverseNumber(fire.getFirecurrent(), 0, fire.getFiremax()), fire.getFiremax());
         }
     }
 }

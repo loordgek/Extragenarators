@@ -1,24 +1,22 @@
 package loordgek.extragenarators.util.fluid;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 
 import javax.annotation.Nullable;
 
-public class AdvFluidTank extends FluidTank{
+public class Tank extends FluidTank{
 
-
-    public AdvFluidTank(int capacity) {
+    public Tank(int capacity) {
         super(capacity);
     }
 
-    public AdvFluidTank(@Nullable FluidStack fluidStack, int capacity) {
+    public Tank(@Nullable FluidStack fluidStack, int capacity) {
         super(fluidStack, capacity);
     }
 
-    public AdvFluidTank(Fluid fluid, int amount, int capacity) {
+    public Tank(Fluid fluid, int amount, int capacity) {
         super(fluid, amount, capacity);
     }
 
@@ -32,5 +30,21 @@ public class AdvFluidTank extends FluidTank{
 
     public int getFreeSpace() {
         return getCapacity() - getFluidAmount();
+    }
+
+    public FluidStack drainMinInternal(int minDrain, int drain) {
+        if (fluid != null && fluid.amount >= minDrain) {
+
+            return drainInternal(drain, true);
+        }
+        return null;
+    }
+
+    public int drainMinInternalInt(int minDrain, int drain) {
+        if (fluid != null && fluid.amount >= minDrain) {
+
+            return drainInternal(drain, true).amount;
+        }
+        return 0;
     }
 }

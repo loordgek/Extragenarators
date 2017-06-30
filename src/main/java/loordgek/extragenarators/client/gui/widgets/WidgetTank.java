@@ -2,7 +2,6 @@ package loordgek.extragenarators.client.gui.widgets;
 
 import loordgek.extragenarators.client.RenderUtils;
 import loordgek.extragenarators.client.gui.GuiExtragenarators;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraftforge.fluids.IFluidTank;
@@ -13,12 +12,10 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class WidgetTank extends WidgetBase {
     private final IFluidTank tank;
+
     public WidgetTank(int id, int x, int y, int width, int height, GuiExtragenarators gui, IFluidTank tank) {
         super(id, x, y, width, height, gui);
         this.tank = tank;
-    }
-    public WidgetTank(int id, int x, int y, GuiExtragenarators gui, IFluidTank tank) {
-        this(id, x, y, 16, 64, gui, tank);
     }
 
     @Override
@@ -32,8 +29,13 @@ public class WidgetTank extends WidgetBase {
         if (tank.getFluid() != null && tank.getFluid().getFluid() != null) {
             EnumRarity r = tank.getFluid().getFluid().getRarity(tank.getFluid());
             tooltips.add((r != null && r.rarityColor != null ? r.rarityColor : EnumRarity.COMMON.rarityColor) + tank.getFluid().getLocalizedName());
+            tooltips.add(Integer.toString(tank.getFluid().amount) + "/" + Integer.toString(tank.getCapacity()));
         }
-        else tooltips.add(I18n.format("fluids.info", tank.getFluidAmount(), tank.getCapacity()));
+        else tooltips.add(Integer.toString(tank.getCapacity()));
+    }
+
+    public IFluidTank getTank() {
+        return tank;
     }
 }
 

@@ -5,11 +5,10 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class ContainerLavaGen extends ContainerExtragenarators<TileLavaGen> {
 
-
     public ContainerLavaGen(EntityPlayer player, TileLavaGen te) {
 
         super(player, te);
-        addPlayerSlots(player.inventory, 50, 50);
+        addPlayerSlots(player.inventory,  8, 84);
     }
 
     @Override

@@ -14,10 +14,10 @@ public class ContainerUpgrade extends ContainerExtragenarators<TileGenBase> {
 
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
-                addSlotToContainer(new SlotUpgrade(tileGenBase.upgradeinv,i + j * 2, 8 + j * 18, 18 + i * 18));
+                addSlotToContainer(new SlotUpgrade(tileGenBase.upgradeinv,i + j * 2, 52 + j * 18, 26 + i * 18));
             }
         }
-        addPlayerSlots(player.inventory,4,80);
+        addPlayerSlots(player.inventory,8,84);
     }
 
     @Override

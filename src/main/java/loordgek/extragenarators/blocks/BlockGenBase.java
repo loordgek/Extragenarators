@@ -21,6 +21,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -74,6 +75,13 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
     }
 
     @Override
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+        TileMain tileMain = (TileMain) world.getTileEntity(pos);
+        assert tileMain != null;
+        tileMain.onNeighborChange(neighbor);
+    }
+
+    @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             int meta = getMetaFromState(state);
@@ -81,13 +89,15 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
                 switch (meta) {
                     case 0:
                         playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.furnacegengui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
-                    case 1:
-                        if (playerIn.getHeldItem(hand) != null && playerIn.getHeldItem(hand).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)){
+                        break;
+                    case 1: {
+                        if (playerIn.getHeldItem(hand) != null && playerIn.getHeldItem(hand).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
                             IFluidHandler fluidHandlerheld = playerIn.getHeldItem(hand).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
                             IFluidHandler fluidHandler = (worldIn.getTileEntity(pos).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null));
                             fluidHandler.fill(fluidHandlerheld.drain(FluidRegistry.getFluidStack("lava", 1000), true), true);
-                        }
-                        else playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.lavagengui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+                        } else
+                            playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.lavagengui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+                    }
                 }
             } else
                 playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.upgradegui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
@@ -105,7 +115,7 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
     @SideOnly(Side.CLIENT)
     @Override
     public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-        for (int i = 0; i < EnumGenarator.getlenth(); i++) {
+        for (int i = 0; i < EnumGenarator.getlength(); i++) {
             list.add(new ItemStack(this, 1, i));
         }
     }
@@ -136,14 +146,23 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
     }
 
     @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        TileMain tileMain = (TileMain) worldIn.getTileEntity(pos);
+        assert tileMain != null;
+        tileMain.breakBlock();
+        super.breakBlock(worldIn, pos, state);
+    }
+
+    @Override
     public String[] variantnames() {
-        String[] strings = new String[EnumGenarator.getlenth()];
-        for (int i = 0; i < EnumGenarator.getlenth(); i++) {
+        String[] strings = new String[EnumGenarator.getlength()];
+        for (int i = 0; i < EnumGenarator.getlength(); i++) {
             strings[i] = EnumGenarator.byMeta(i).getName();
         }
         return strings;
     }
 
     @Override
-    public void RegisterRender(String name) {}
+    public void RegisterRender(String name) {
+    }
 }

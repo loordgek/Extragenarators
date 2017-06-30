@@ -4,7 +4,6 @@ import loordgek.extragenarators.client.gui.widgets.WidgetBase;
 import loordgek.extragenarators.ref.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
@@ -24,13 +23,15 @@ public class GuiExtragenarators<TE extends TileEntity> extends GuiContainer {
     protected final TE tile;
     private final EntityPlayer player;
     private final ResourceLocation guiTexture;
-    private List<WidgetBase> widgetBaseList = new ArrayList<WidgetBase>();
+    private List<WidgetBase> widgetBaseList = new ArrayList<>();
+    private final String name;
 
-    public GuiExtragenarators(Container container, String guiTextureName, EntityPlayer player, TE tile){
+    public GuiExtragenarators(Container container, String guiTextureName, EntityPlayer player, TE tile, String name){
         super(container);
         this.tile = tile;
-        guiTexture = new ResourceLocation(Reference.MODINFO.MOD_ID + ":textures/gui/" + guiTextureName + ".png");
         this.player = player;
+        guiTexture = new ResourceLocation(Reference.MODINFO.MOD_ID + ":textures/gui/" + guiTextureName + ".png");
+        this.name = name;
     }
 
     @Override
@@ -42,9 +43,7 @@ public class GuiExtragenarators<TE extends TileEntity> extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY){
-        String s = "UpGrade";
-        fontRendererObj.drawString(s, xSize / 2 - fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
-        fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
+        fontRendererObj.drawString(name, 8, 6, 4210752);
     }
 
     @Override

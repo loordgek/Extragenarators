@@ -27,4 +27,16 @@ public enum EnumItems {
     public void RegisterRender()  {
         lookup.RegisterRender(name);
     }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public IVariantLookup getLookup() {
+        return lookup;
+    }
 }

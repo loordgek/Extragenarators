@@ -10,7 +10,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 
-public class InventorySimpleItemhander implements IItemHandler, IItemHandlerModifiable, INBTSerializable<NBTTagCompound> {
+public class InventorySimpleItemHandler implements IItemHandler, IItemHandlerModifiable, INBTSerializable<NBTTagCompound> {
 
 
     private final int stacksize;
@@ -19,7 +19,7 @@ public class InventorySimpleItemhander implements IItemHandler, IItemHandlerModi
     private final IInventoryOnwer onwer;
     private ItemStack[] stacks;
 
-    public InventorySimpleItemhander(int stacksize, int invsize, String name, IInventoryOnwer onwer) {
+    public InventorySimpleItemHandler(int stacksize, int invsize, String name, IInventoryOnwer onwer) {
         this.stacksize = stacksize;
         this.invsize = invsize;
         this.name = name;
@@ -37,110 +37,74 @@ public class InventorySimpleItemhander implements IItemHandler, IItemHandlerModi
         return stacks[slot];
     }
 
-    public boolean isStackValidForSlot(int Slot, ItemStack stack){
+    public boolean isStackValidForSlot(int Slot, ItemStack stack) {
         return true;
     }
 
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        if (stack == null)
+        if (stack == null || stack.stackSize == 0)
             return null;
 
-        if (!isStackValidForSlot(slot, stack))
+        if (!isStackValidForSlot(slot, stack)) {
             return stack;
+        }
 
-        ItemStack stackinslot = getStackInSlot(slot);
+        ItemStack existing = this.stacks[slot];
 
-        int m;
-        if (stackinslot != null) {
-            if (!ItemHandlerHelper.canItemStacksStack(stack, stackinslot))
+        int limit = stacksize;
+
+        if (existing != null) {
+            if (!ItemHandlerHelper.canItemStacksStack(stack, existing))
                 return stack;
 
-            m = Math.min(stack.getMaxStackSize(), stacksize - stackinslot.stackSize);
-            if (stack.stackSize <= m) {
-                if (!simulate) {
-                    ItemStack copy = stack.copy();
-                    copy.stackSize += stackinslot.stackSize;
-                    stacks[slot] = stack;
-                    onwer.OnInventoryChanged(stack, slot, name, EnumInvFlow.INSERT);
-                    onwer.markDirty();
-                }
-                return null;
-
-            } else {
-                stack = stack.copy();
-                if (!simulate) {
-                    ItemStack copy = stack.splitStack(m);
-                    copy.stackSize += stackinslot.stackSize;
-                    stacks[slot] = stack;
-                    onwer.OnInventoryChanged(stack, slot, name, EnumInvFlow.INSERT);
-                    onwer.markDirty();
-                }
-            }
-        } else {
-            m = Math.min(stack.getMaxStackSize(), stacksize);
-            if (m < stack.stackSize) {
-                stack = stack.copy();
-                if (!simulate) {
-                    stacks[slot] = stack;
-                    onwer.OnInventoryChanged(stack, slot, name, EnumInvFlow.INSERT);
-                    onwer.markDirty();
-                    return stack;
-                } else {
-                    stack.stackSize -= m;
-                    return stack;
-                }
-            } else {
-                if (!simulate) {
-                    stacks[slot] = stack;
-                    onwer.OnInventoryChanged(stack, slot, name, EnumInvFlow.INSERT);
-                    onwer.markDirty();
-                }
-                return null;
-            }
+            limit -= existing.stackSize;
         }
-        return null;
+
+        if (limit <= 0)
+            return stack;
+
+        boolean reachedLimit = stack.stackSize > limit;
+
+        if (!simulate) {
+            if (existing == null) {
+                this.stacks[slot] = reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, limit) : stack;
+            } else {
+                existing.stackSize += reachedLimit ? limit : stack.stackSize;
+            }
+            ItemStack stack1 = reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.stackSize - limit) : null;
+            onwer.OnInventoryChanged(stack1, slot, name, EnumInvFlow.INSERT);
+        }
+
+        return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.stackSize - limit) : null;
     }
 
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         if (amount == 0)
             return null;
-        ItemStack stackInSlot = stacks[slot];
 
-        if (stackInSlot == null)
+        ItemStack existing = this.stacks[slot];
+
+        if (existing == null)
             return null;
 
-        if (simulate)
-            if (stackInSlot.stackSize < amount)
-                return stackInSlot.copy();
-            else {
-                ItemStack copy = stackInSlot.copy();
-                copy.stackSize = amount;
-                return copy;
+        int toExtract = Math.min(amount, existing.getMaxStackSize());
+
+        if (existing.stackSize <= toExtract) {
+            if (!simulate) {
+                this.stacks[slot] = null;
+                onwer.OnInventoryChanged(existing, slot, name, EnumInvFlow.EXTRACT);
             }
-        else {
-            int m = Math.min(stackInSlot.stackSize, amount);
-
-            ItemStack decrStackSize = decrStackSize(slot, amount);
-            onwer.OnInventoryChanged(decrStackSize, slot, name, EnumInvFlow.EXTRACT);
-            onwer.markDirty();
-            return decrStackSize;
-        }
-    }
-
-    private ItemStack decrStackSize(int slot, int count) {
-        if (stacks[slot].stackSize <= count) {
-
-            ItemStack stack = this.stacks[slot];
-            stacks[slot] = null;
-            return stack;
+            return existing;
         } else {
-            ItemStack stack = stacks[slot].splitStack(count);
-            if (stacks[slot].stackSize == 0) {
-                stacks[slot] = null;
+            if (!simulate) {
+                ItemStack stack = ItemHandlerHelper.copyStackWithSize(existing, existing.stackSize - toExtract);
+                this.stacks[slot] = stack;
+                onwer.OnInventoryChanged(stack, slot, name, EnumInvFlow.EXTRACT);
             }
-            return stack;
+
+            return ItemHandlerHelper.copyStackWithSize(existing, toExtract);
         }
     }
 
