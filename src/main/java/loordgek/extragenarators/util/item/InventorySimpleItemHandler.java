@@ -37,10 +37,17 @@ public class InventorySimpleItemhander implements IItemHandler, IItemHandlerModi
         return stacks[slot];
     }
 
+    public boolean isStackValidForSlot(int Slot, ItemStack stack){
+        return true;
+    }
+
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
         if (stack == null)
             return null;
+
+        if (!isStackValidForSlot(slot, stack))
+            return stack;
 
         ItemStack stackinslot = getStackInSlot(slot);
 

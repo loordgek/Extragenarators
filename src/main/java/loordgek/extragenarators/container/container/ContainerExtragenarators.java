@@ -29,18 +29,18 @@ public abstract class ContainerExtragenarators<Tile extends IContainerGuiSync> e
     public Tile te;
 
     /**
-     * The current drag mode (0 : evenly split, 1 : one item by slot, 2 : not used ?)
+     * The current drag mode (0 : evenly split, 1 : one itemtest by slot, 2 : not used ?)
      */
     private int dragMode = -1;
     /**
      * The current drag event (0 : start, 1 : add slot : 2 : end)
      */
     private int dragEvent;
-    private final Set<Slot> dragSlots = Sets.<Slot>newHashSet();
+    private final Set<Slot> dragSlots = Sets.newHashSet();
 
     private final List<SyncField> syncFields = new ArrayList<SyncField>();
 
-    public ContainerExtragenarators(Tile te) {
+    public ContainerExtragenarators(EntityPlayer player, Tile te) {
         this.te = te;
         if (te != null) addSyncFields(te);
     }
@@ -54,14 +54,6 @@ public abstract class ContainerExtragenarators<Tile extends IContainerGuiSync> e
 
         for (int i = 0; i < 9; ++i) {
             addSlotToContainer(new Slot(playerInventory, i, x + i * 18, y + 58));
-        }
-    }
-
-    protected void addSlotListToContainer(IItemHandler handler, int x, int y, int rows, int collums){
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < collums; j++) {
-                addSlotToContainer(new SlotItemHandler(handler, j + i + rows, x + j * 18, y + i *18));
-            }
         }
     }
 

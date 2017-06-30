@@ -1,33 +1,43 @@
 {
 	"textures": {
-		"particle": "extragenarators:blocks/e_particle",
+		"particle": "minecraft:blocks/cobblestone",
 		"texture": "minecraft:blocks/cobblestone"
 	},
 	"elements": [
 		{
-			"__comment": "Cube1",
 			"from": [ 0, 0, 0 ],
-			"to": [ 16, 4.5, 16 ],
+			"to": [ 16, 2, 16 ],
 			"faces": {
-				"down": { "uv": [ 0, 0, 16, 16 ], "texture": "#texture", "cullface": "down" },
+				"down": { "uv": [ 0, 0, 16, 16 ], "texture": "#texture" },
 				"up": { "uv": [ 0, 0, 16, 16 ], "texture": "#texture" },
-				"north": { "uv": [ 0, 11.5, 16, 16 ], "texture": "#texture" },
-				"south": { "uv": [ 0, 11.5, 16, 16 ], "texture": "#texture" },
-				"west": { "uv": [ 0, 11.5, 16, 16 ], "texture": "#texture" },
-				"east": { "uv": [ 0, 11.5, 16, 16 ], "texture": "#texture" }
+				"north": { "uv": [ 0, 14, 16, 16 ], "texture": "#texture" },
+				"south": { "uv": [ 0, 14, 16, 16 ], "texture": "#texture" },
+				"west": { "uv": [ 0, 14, 16, 16 ], "texture": "#texture" },
+				"east": { "uv": [ 0, 14, 16, 16 ], "texture": "#texture" }
 			}
 		},
 		{
-			"__comment": "Cube2",
-			"from": [ 6.5, 4.5, 6.5 ],
-			"to": [ 9.5, 11.5, 9.5 ],
+			"from": [ 2, 2, 2 ],
+			"to": [ 14, 14, 14 ],
 			"faces": {
-				"down": { "uv": [ 6.5, 6.5, 9.5, 9.5 ], "texture": "#texture" },
-				"up": { "uv": [ 6.5, 6.5, 9.5, 9.5 ], "texture": "#texture" },
-				"north": { "uv": [ 6.5, 4.5, 9.5, 11.5 ], "texture": "#texture" },
-				"south": { "uv": [ 6.5, 4.5, 9.5, 11.5 ], "texture": "#texture" },
-				"west": { "uv": [ 6.5, 4.5, 9.5, 11.5 ], "texture": "#texture" },
-				"east": { "uv": [ 6.5, 4.5, 9.5, 11.5 ], "texture": "#texture" }
+				"down": { "uv": [ 2, 2, 14, 14 ], "texture": "#texture" },
+				"up": { "uv": [ 2, 2, 14, 14 ], "texture": "#texture" },
+				"north": { "uv": [ 2, 2, 14, 14 ], "texture": "#texture" },
+				"south": { "uv": [ 2, 2, 14, 14 ], "texture": "#texture" },
+				"west": { "uv": [ 2, 2, 14, 14 ], "texture": "#texture" },
+				"east": { "uv": [ 2, 2, 14, 14 ], "texture": "#texture" }
+			}
+		},
+		{
+			"from": [ 0, 14, 0 ],
+			"to": [ 16, 16, 16 ],
+			"faces": {
+				"down": { "uv": [ 0, 0, 16, 16 ], "texture": "#texture" },
+				"up": { "uv": [ 0, 0, 16, 16 ], "texture": "#texture" },
+				"north": { "uv": [ 0, 0, 16, 2 ], "texture": "#texture" },
+				"south": { "uv": [ 0, 0, 16, 2 ], "texture": "#texture" },
+				"west": { "uv": [ 0, 0, 16, 2 ], "texture": "#texture" },
+				"east": { "uv": [ 0, 0, 16, 2 ], "texture": "#texture" }
 			}
 		}
 	],

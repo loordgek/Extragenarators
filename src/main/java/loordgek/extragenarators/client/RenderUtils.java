@@ -109,7 +109,7 @@ public class RenderUtils {
         drawModalRectWithCustomSizedTexture(widgetBase.x, widgetBase.y, 0, 0, widgetBase.width, MathUtil.scalereverse(currunt, max, widgetBase.height), widgetBase.width, widgetBase.height, Drawgui.DOWN, currunt);
     }
 
-    public static void drawWidgetUp(WidgetBase widgetBase, ResourceLocation location, int currunt, int max) {
+    public static void drawWidgetUp(WidgetBase widgetBase, ResourceLocation location, int currunt, double max) {
         getTextureManager().bindTexture(location);
         drawModalRectWithCustomSizedTexture(widgetBase.x, widgetBase.y, 0, 0, widgetBase.width, widgetBase.height, widgetBase.width, widgetBase.height, Drawgui.UP, MathUtil.scale(currunt, max, widgetBase.height));
     }

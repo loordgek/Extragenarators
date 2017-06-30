@@ -44,6 +44,21 @@ public enum EnumBlocks {
             ModelResourceLocation modelResourceLocation = new ModelResourceLocation(Reference.RESOURCE.RESOURCE_PREFIX + name, lookup.variantnames()[i]);
             Extragenarators.proxy.setCustomModelResourceLocationitem(itemBlock, i, modelResourceLocation);
         }
+    }
 
+    public Block getBlock() {
+        return block;
+    }
+
+    public ItemBlock getItemBlock() {
+        return itemBlock;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public IVariantLookup getLookup() {
+        return lookup;
     }
 }

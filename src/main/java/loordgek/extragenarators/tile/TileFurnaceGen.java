@@ -1,18 +1,23 @@
 package loordgek.extragenarators.tile;
 
 import loordgek.extragenarators.nbt.NBTSave;
-import loordgek.extragenarators.util.LogHelper;
-import loordgek.extragenarators.util.item.InventorySimpleItemhander;
+import loordgek.extragenarators.util.item.InventorySimpleItemHandler;
+import loordgek.extragenarators.util.item.InventoryUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileFurnaceGen extends TileGenBase implements ITickable {
+public class TileFurnaceGen extends TileGenBase{
+
     @NBTSave
-    public InventorySimpleItemhander fuelSlot = new InventorySimpleItemhander(64, 1, "FuelSlot", this);
+    public InventorySimpleItemHandler fuelSlot = new InventorySimpleItemHandler(64, 1, "FuelSlot", this){
+        @Override
+        public boolean isStackValidForSlot(int Slot, ItemStack stack) {
+            return TileEntityFurnace.isItemFuel(stack);
+        }
+    };
 
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
@@ -27,59 +32,39 @@ public class TileFurnaceGen extends TileGenBase implements ITickable {
         return super.getCapability(capability, facing);
     }
 
-    public ItemStack getStack() {
+    protected ItemStack getStack() {
         return fuelSlot.getStackInSlot(0);
     }
 
     @Override
-    public void update() {
-        super.update();
-        if (currentburntime < 0)
-            currentburntime = 0;
-        if (!worldObj.isRemote) {
-            if (!IsRunning()) {
-                isburing = false;
-                if (getStack() != null) {
-                    if (HasRoomForEnergy()){
-                        if (TileEntityFurnace.isItemFuel(getStack())) {
-                            maxmultiplier = fuelSlot.extractItem(0, upgrademultiplier, true).stackSize;
-                            runspeed = upgradespeed / maxmultiplier;
-                            burntime = (int) (TileEntityFurnace.getItemBurnTime(getStack()) * maxmultiplier);
-                            currentburntime = (int) (TileEntityFurnace.getItemBurnTime(getStack()) * maxmultiplier);
-                            fuelSlot.extractItem(0, (int) maxmultiplier, false);
-                        }
+    protected void updateServerSide() {
+        if (HasEnergy()) sendEnergy();
+        if (!IsRunning()) {
+            isburing = false;
+            if (getStack() != null) {
+                if (HasRoomForEnergy()) {
+                    if (TileEntityFurnace.isItemFuel(getStack())) {
+                        maxmultiplier = fuelSlot.extractItem(0, upgrademultiplier, true).stackSize;
+                        runspeed = upgradespeed / maxmultiplier;
+                        fire.setFiremax(TileEntityFurnace.getItemBurnTime(getStack()) * maxmultiplier);
+                        fire.setFirecurrent(TileEntityFurnace.getItemBurnTime(getStack()) * maxmultiplier);
+                        fuelSlot.extractItem(0, maxmultiplier, false);
                     }
                 }
-            } else {
-                isburing = true;
-                runspeed = upgradespeed / maxmultiplier;
-                float minburntime = (float) Math.min(currentburntime, runspeed);
-                currentburntime -= minburntime;
-                power.floatreceiveEnergy(forgepower * minburntime, false);
-                if (currentburntime <= 0) {
-                    burntime = 0;
-                }
             }
+        } else {
+            Burn();
         }
     }
 
     @Override
-    public void update2secClientSide() {
-        LogHelper.logEnergyStorage(power);
+    public void breakBlock() {
+        super.breakBlock();
+        InventoryUtil.dropInv(worldObj, InventoryUtil.getStacks(fuelSlot), pos);
     }
 
     @Override
-    public void update2secSeverSide() {
-        super.update2secSeverSide();
-        LogHelper.logEnergyStorage(power);
-        float testrunspeed = upgradespeed / upgrademultiplier;
-        LogHelper.info(testrunspeed);
+    public Object getNBTClass() {
+        return this;
     }
-
-    @Override
-    public void onLoad() {
-        addFields(this);
-        ReCalculateUpgrade();
-    }
-
 }

@@ -1,25 +1,25 @@
 package loordgek.extragenarators.util;
 
 public class MathUtil {
-    public static double getpercentage(int Current, int max){
+    public static long getpercentage(long Current, long max){
         return scale(Current, max, 100);
     }
 
-    public static double getpercentagereverse(int Current, int max){
+    public static long getpercentagereverse(long Current, long max){
         return scalereverse(Current, max, 100);
     }
 
-    public static double scale(int currentint, int maxint, int size) {
-        if (maxint == 0) return 0;
-        return currentint * size / maxint;
+    public static long scale(long currentint, long maxlong, long size) {
+        if (maxlong == 0) return 0;
+        return currentint * size / maxlong;
     }
 
-    public static double scalereverse(double currentint, double maxint, double size) {
+    public static long scalereverse(long currentint, long maxint, long size) {
         if (maxint == 0) return 0;
         return (reverseNumber(currentint, 0, maxint) * size / maxint);
     }
 
-    public static double reverseNumber(double num, double min, double max) {
+    public static long reverseNumber(long num, long min, long max) {
         return (max + min) - num;
     }
 }

@@ -1,16 +1,17 @@
 package loordgek.extragenarators.util;
 
+import loordgek.extragenarators.network.GuiSync;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class ForgePower implements IEnergyStorage, INBTSerializable<NBTTagCompound> {
-    protected final int initialcapacity;
-    protected double energy;
-    protected double capacity;
-    protected int maxReceive;
-    protected int maxExtract;
+public class ForgePower implements IEnergyStorage, INBTSerializable<NBTTagCompound>{
+    protected int initialcapacity;
+    @GuiSync protected long energy;
+    @GuiSync protected long capacity;
+    @GuiSync protected int maxReceive;
+    @GuiSync protected int maxExtract;
     protected float Floatenergy;
 
     public ForgePower(int capacity)
@@ -33,20 +34,26 @@ public class ForgePower implements IEnergyStorage, INBTSerializable<NBTTagCompou
 
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
-        if (!canReceive())
-            return 0;
+        if (canReceive())
+            return receiveEnergyInternal(maxReceive, simulate);
+        return 0;
+    }
 
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate) {
+        if (canExtract())
+            return extractEnergyInternal(maxExtract, simulate);
+        return 0;
+    }
+
+
+    public int receiveEnergyInternal(int maxReceive, boolean simulate) {
         int energyReceived = (int) Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
         if (!simulate)
             energy += energyReceived;
         return energyReceived;
     }
-
-    @Override
-    public int extractEnergy(int maxExtract, boolean simulate) {
-        if (!canExtract())
-            return 0;
-
+    public int extractEnergyInternal(int maxExtract, boolean simulate) {
         int energyExtracted = (int) Math.min(energy, Math.min(this.maxExtract, maxExtract));
         if (!simulate)
             energy -= energyExtracted;
@@ -54,13 +61,11 @@ public class ForgePower implements IEnergyStorage, INBTSerializable<NBTTagCompou
     }
 
     public float floatreceiveEnergy(float maxReceive, boolean simulate) {
-        if (!canReceive())
-            return 0;
-        float energyReceived = Math.min((float) capacity - Floatenergy, Math.min((float) this.maxReceive, maxReceive));
+        float energyReceived = Math.min(capacity - Floatenergy, Math.min(this.maxReceive, maxReceive));
         if (!simulate) {
             Floatenergy += energyReceived;
             int floor_float = MathHelper.floor_float(Floatenergy);
-            receiveEnergy(floor_float, false);
+            receiveEnergyInternal(floor_float, false);
             Floatenergy -= floor_float;
         }
 
@@ -70,10 +75,7 @@ public class ForgePower implements IEnergyStorage, INBTSerializable<NBTTagCompou
     // TODO: 10-10-2016
     @Deprecated
     public float floatextractEnergy(float maxExtract, boolean simulate) {
-        if (!canExtract())
-            return 0;
-
-        float energyExtracted = (float) Math.min(energy, Math.min(this.maxExtract, maxExtract));
+        float energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
         if (!simulate)
             Floatenergy -= energyExtracted;
         return energyExtracted;
@@ -98,7 +100,7 @@ public class ForgePower implements IEnergyStorage, INBTSerializable<NBTTagCompou
     @Override
     public boolean canReceive()
     {
-        return this.maxReceive > 0;
+        return false;
     }
 
     @Override
@@ -110,27 +112,11 @@ public class ForgePower implements IEnergyStorage, INBTSerializable<NBTTagCompou
 
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
-        energy = nbt.getDouble("energy");
+        energy = nbt.getLong("energy");
 
     }
 
     public void Increasecapacity(int TimesMultiplier){
         capacity = initialcapacity * TimesMultiplier;
-    }
-
-    public double getEnergy() {
-        return energy;
-    }
-
-    public double getCapacity() {
-        return capacity;
-    }
-
-    public void setEnergy(double energy) {
-        this.energy = energy;
-    }
-
-    public void setCapacity(double capacity) {
-        this.capacity = capacity;
     }
 }

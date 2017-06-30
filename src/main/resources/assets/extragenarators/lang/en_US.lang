@@ -1,0 +1,16 @@
+item.extragenarators:upgrade.speedboost1.name=speedboost1
+item.extragenarators:upgrade.speedboost2.name=speedboost2
+item.extragenarators:upgrade.speedboost3.name=speedboost3
+item.extragenarators:upgrade.speedboost4.name=speedboost4
+item.extragenarators:upgrade.powerstore1.name=powerstore1
+item.extragenarators:upgrade.powerstore2.name=powerstore2
+item.extragenarators:upgrade.powerstore3.name=powerstore3
+item.extragenarators:upgrade.powerstore4.name=powerstore4
+item.extragenarators:upgrade.multiplier1.name=multiplier1
+item.extragenarators:upgrade.multiplier2.name=multiplier2
+item.extragenarators:upgrade.multiplier3.name=multiplier3
+item.extragenarators:upgrade.multiplier4.name=multiplier4
+
+tile.extragenarators:genbase.furnace.name=furnace generator
+tile.extragenarators:genbase.lava.name=lava generator
+

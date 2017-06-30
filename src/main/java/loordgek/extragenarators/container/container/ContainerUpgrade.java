@@ -10,14 +10,13 @@ import javax.annotation.Nullable;
 public class ContainerUpgrade extends ContainerExtragenarators<TileGenBase> {
 
     public ContainerUpgrade(EntityPlayer player, TileGenBase tileGenBase) {
-        super(tileGenBase);
+        super(player, tileGenBase);
 
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 4; j++) {
                 addSlotToContainer(new SlotUpgrade(tileGenBase.upgradeinv,i + j * 2, 8 + j * 18, 18 + i * 18));
             }
         }
-        addSlotListToContainer(tileGenBase.upgradeinv, 50, 50, 2, 4);
         addPlayerSlots(player.inventory,4,80);
     }
 

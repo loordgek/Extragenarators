@@ -7,8 +7,6 @@ import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 
-import java.util.List;
-
 public class LogHelper {
     public static void log(Level logLevel, Object object){
         FMLLog.log(Reference.MODINFO.MOD_ID, logLevel, String.valueOf(object));
@@ -45,16 +43,13 @@ public class LogHelper {
     public static void warn(Object object){
         log(Level.WARN, object);
     }
+
     public static void logItemstack(ItemStack stack){
         info(stack.getItem().getUnlocalizedName() + " stackSize " + stack.stackSize + " Metadata " + stack.getMetadata() + " NBT " + stack.getTagCompound());
     }
+
     public static void logEnergyStorage(IEnergyStorage energyStorage){
         info("EnergyStored " + energyStorage.getEnergyStored() + " MaxEnergyStored " + energyStorage.getMaxEnergyStored());
-    }
-    public static void LogList(List<?> list){
-        for (Object o: list) {
-            LogHelper.info(o);
-        }
     }
 
 }

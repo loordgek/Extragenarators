@@ -22,7 +22,7 @@ public class Reference {
 
     public static class ITEMS {
         public static final String upgrade = "upgrade";
-        public static final String[] typeupgrade = {"speedboost1", "speedboost2", "speedboost3", "speedboost4", "powerstore1", "powerstore2", "powerstore3", "powerstore4", "multpliplier1", "multpliplier2", "multpliplier3", "multpliplier4"};
+        public static final String[] typeupgrade = {"speedboost1", "speedboost2", "speedboost3", "speedboost4", "powerstore1", "powerstore2", "powerstore3", "powerstore4", "multiplier1", "multiplier2", "multiplier3", "multiplier4"};
     }
 }
 

@@ -39,8 +39,6 @@ public class GuiSyncPacket extends AbstractPacket<GuiSyncPacket> {
         else if (syncedField instanceof SyncField.Stringfieldsync) return 7;
         else if (syncedField instanceof SyncField.ItemStackfieldsync) return 8;
         else if (syncedField instanceof SyncField.FluidStackfieldsync) return 9;
-        else if (syncedField instanceof SyncField.Energyfiedsync) return 10;
-
         else {
             throw new IllegalArgumentException("Invalid sync type! " + syncedField);
         }
@@ -69,8 +67,6 @@ public class GuiSyncPacket extends AbstractPacket<GuiSyncPacket> {
             case 9:
                 if (!buf.readBoolean()) return null;
                 return new FluidStack(FluidRegistry.getFluid(ByteBufUtils.readUTF8String(buf)), buf.readInt(), ByteBufUtils.readTag(buf));
-            case 10:
-                return new PowerSync(buf.readInt(), buf.readInt());
         }
         throw new IllegalArgumentException("Invalid sync type! " + type);
     }
@@ -113,15 +109,10 @@ public class GuiSyncPacket extends AbstractPacket<GuiSyncPacket> {
                     ByteBufUtils.writeTag(buf, stack.tag);
                 }
                 break;
-            case 10:
-                PowerSync powerSync = (PowerSync) value;
-                buf.writeInt(powerSync.getEnergy());
-                buf.writeInt(powerSync.getEnergystore());
-                break;
         }
     }
 
-    private boolean isTypeThreadSafe(byte Type) {
+    public boolean isTypeThreadSafe(byte Type) {
         switch (Type) {
             case 0:
                 return true;
@@ -142,8 +133,6 @@ public class GuiSyncPacket extends AbstractPacket<GuiSyncPacket> {
             case 8:
                 return false;
             case 9:
-                return false;
-            case 10:
                 return false;
             default:
                 return false;

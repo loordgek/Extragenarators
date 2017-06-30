@@ -25,5 +25,4 @@ public class WidgetFire extends WidgetBase {
             RenderUtils.drawWidgetUp(this, firepng, (int) MathUtil.reverseNumber(fire.FireCurrent(), 0, fire.FireMax()), fire.FireMax());
         }
     }
-
 }

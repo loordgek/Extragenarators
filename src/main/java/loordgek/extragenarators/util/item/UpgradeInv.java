@@ -1,7 +1,7 @@
 package loordgek.extragenarators.util.item;
 
 
-public class UpgradeInv extends InventorySimpleItemhander implements IUpdateItemHander {
+public class UpgradeInv extends InventorySimpleItemHandler implements IUpdateItemHander {
     public UpgradeInv(int stacksize, int invsize, String name, IInventoryOnwer onwer) {
         super(stacksize, invsize, name, onwer);
     }

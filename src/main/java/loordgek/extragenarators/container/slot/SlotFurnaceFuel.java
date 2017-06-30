@@ -1,5 +1,6 @@
 package loordgek.extragenarators.container.slot;
 
+
 import loordgek.extragenarators.util.item.InventoryUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;

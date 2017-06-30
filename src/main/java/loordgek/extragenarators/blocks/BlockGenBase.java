@@ -4,6 +4,7 @@ import loordgek.extragenarators.Extragenarators;
 import loordgek.extragenarators.GuiHander;
 import loordgek.extragenarators.enums.EnumGenarator;
 import loordgek.extragenarators.tile.TileFurnaceGen;
+import loordgek.extragenarators.tile.TileLavaGen;
 import loordgek.extragenarators.tile.TileMain;
 import loordgek.extragenarators.util.IVariantLookup;
 import net.minecraft.block.properties.PropertyEnum;
@@ -21,12 +22,17 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class BlockGenBase extends BlockMain implements IVariantLookup {
     private final static PropertyEnum<EnumGenarator> genmeta = PropertyEnum.create("genmeta", EnumGenarator.class);
 
@@ -41,6 +47,8 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
         switch (meta) {
             case 0:
                 return new TileFurnaceGen();
+            case 1:
+                return new TileLavaGen();
         }
         return null;
     }
@@ -74,9 +82,12 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
                     case 0:
                         playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.furnacegengui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
                     case 1:
-                        playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.lavagengui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
-                    case 2:
-                        playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.endergengui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+                        if (playerIn.getHeldItem(hand) != null && playerIn.getHeldItem(hand).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)){
+                            IFluidHandler fluidHandlerheld = playerIn.getHeldItem(hand).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+                            IFluidHandler fluidHandler = (worldIn.getTileEntity(pos).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null));
+                            fluidHandler.fill(fluidHandlerheld.drain(FluidRegistry.getFluidStack("lava", 1000), true), true);
+                        }
+                        else playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.lavagengui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
                 }
             } else
                 playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.upgradegui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
@@ -132,4 +143,7 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
         }
         return strings;
     }
+
+    @Override
+    public void RegisterRender(String name) {}
 }

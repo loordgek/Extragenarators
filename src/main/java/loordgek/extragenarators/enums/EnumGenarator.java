@@ -24,7 +24,7 @@ public enum EnumGenarator implements IStringSerializable {
         this.meta = meta;
     }
 
-    public static int getlenth(){
+    public static int getlength(){
         return EnumGenarator.values().length;
     }
 

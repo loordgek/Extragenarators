@@ -1,6 +1,6 @@
 package loordgek.extragenarators.network;
 
-import loordgek.extragenarators.util.ForgePower;
+
 import loordgek.extragenarators.util.LogHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
 public abstract class SyncField<T> {
     private final Field field;
     private final Object te;
-    private T lastValue;
+    private T lastValue = null;
     private int arrayIndex = -1;
     private boolean isLazy;
 
@@ -44,7 +44,7 @@ public abstract class SyncField<T> {
                 return !isLazy;
             }
         } catch (Throwable e) {
-            LogHelper.error("A problem occured when trying to sync the field of " + te.toString() + ". Field: " + field.toString());
+            LogHelper.error("A problem occurred when trying to sync the field of " + te.toString() + ". Field: " + field.toString());
             e.printStackTrace();
         }
         return false;
@@ -287,34 +287,5 @@ public abstract class SyncField<T> {
             return oldValue.copy();
         }
 
-    }
-
-    public static class Energyfiedsync extends SyncField<PowerSync> {
-        public Energyfiedsync(Object te, Field field) {
-            super(te, field);
-        }
-
-        @Override
-        protected PowerSync getValueForArray(Object array, int index) {
-            return new PowerSync(((ForgePower[]) array)[index].getEnergyStored(), ((ForgePower[]) array)[index].getMaxEnergyStored());
-        }
-
-        @Override
-        protected void setValueForArray(Object array, int index, PowerSync value) throws Exception {
-            ((ForgePower[]) array)[index].setEnergy(value.getEnergy());
-        }
-
-        @Override
-        protected PowerSync retrieveValue(Field field, Object te) throws Exception {
-            ForgePower power = (ForgePower) field.get(te);
-            return new PowerSync(power.getEnergyStored(), power.getMaxEnergyStored());
-        }
-
-        @Override
-        protected void injectValue(Field field, Object te, PowerSync value) throws Exception {
-            ForgePower power = (ForgePower) field.get(te);
-            power.setEnergy(value.getEnergy());
-            power.setCapacity(value.getEnergystore());
-        }
     }
 }

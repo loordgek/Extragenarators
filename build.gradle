@@ -37,9 +37,7 @@ repositories {}
 
 dependencies {}
 
-jar {
-
-}
+jar {}
 
 task apiJar(type: Jar) {
     baseName "publishing-api"

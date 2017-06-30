@@ -7,6 +7,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -19,13 +20,15 @@ import java.util.Collections;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class GuiExtragenarators extends GuiContainer {
+public class GuiExtragenarators<TE extends TileEntity> extends GuiContainer {
+    protected final TE tile;
     private final EntityPlayer player;
     private final ResourceLocation guiTexture;
     private List<WidgetBase> widgetBaseList = new ArrayList<WidgetBase>();
 
-    public GuiExtragenarators(Container container, String guiTextureName, EntityPlayer player){
+    public GuiExtragenarators(Container container, String guiTextureName, EntityPlayer player, TE tile){
         super(container);
+        this.tile = tile;
         guiTexture = new ResourceLocation(Reference.MODINFO.MOD_ID + ":textures/gui/" + guiTextureName + ".png");
         this.player = player;
     }
@@ -60,7 +63,7 @@ public class GuiExtragenarators extends GuiContainer {
     @Override
     public void drawScreen(int x, int y, float f) {
         super.drawScreen(x, y, f);
-        List<String> tooltips = new ArrayList<String>();
+        List<String> tooltips = new ArrayList<>();
 
         for (WidgetBase widget : widgetBaseList)
             if (widget.getBounds().contains(x, y))

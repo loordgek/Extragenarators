@@ -9,7 +9,6 @@ import javax.annotation.Nullable;
 
 public class SlotUpgrade extends SlotItemHandler {
 
-
     public SlotUpgrade(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
         super(itemHandler, index, xPosition, yPosition);
     }

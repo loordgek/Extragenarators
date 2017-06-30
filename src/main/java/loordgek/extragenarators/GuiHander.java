@@ -1,11 +1,14 @@
 package loordgek.extragenarators;
 
 import loordgek.extragenarators.client.gui.GuiFurnaceGen;
+import loordgek.extragenarators.client.gui.GuiLavaGen;
 import loordgek.extragenarators.client.gui.GuiUpgrade;
 import loordgek.extragenarators.container.container.ContainerFurnaceGen;
+import loordgek.extragenarators.container.container.ContainerLavaGen;
 import loordgek.extragenarators.container.container.ContainerUpgrade;
 import loordgek.extragenarators.tile.TileFurnaceGen;
 import loordgek.extragenarators.tile.TileGenBase;
+import loordgek.extragenarators.tile.TileLavaGen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -28,6 +31,9 @@ public class GuiHander implements IGuiHandler {
                 return new ContainerUpgrade(player, (TileGenBase) tile);
             case furnacegengui:
                 return new ContainerFurnaceGen(player, (TileFurnaceGen) tile);
+            case lavagengui:
+                return new ContainerLavaGen(player, (TileLavaGen) tile);
+
         }
         return null;
     }
@@ -40,6 +46,9 @@ public class GuiHander implements IGuiHandler {
                 return new GuiUpgrade(player, (TileGenBase) tile);
             case furnacegengui:
                 return new GuiFurnaceGen(player, (TileFurnaceGen) tile);
+            case lavagengui:
+                return new GuiLavaGen(player, (TileLavaGen) tile);
+
         }
         return null;
     }

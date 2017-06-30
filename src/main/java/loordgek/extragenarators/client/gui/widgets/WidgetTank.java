@@ -17,6 +17,9 @@ public class WidgetTank extends WidgetBase {
         super(id, x, y, width, height, gui);
         this.tank = tank;
     }
+    public WidgetTank(int id, int x, int y, GuiExtragenarators gui, IFluidTank tank) {
+        this(id, x, y, 16, 64, gui, tank);
+    }
 
     @Override
     public void render(int mouseX, int mouseY) {
@@ -30,7 +33,7 @@ public class WidgetTank extends WidgetBase {
             EnumRarity r = tank.getFluid().getFluid().getRarity(tank.getFluid());
             tooltips.add((r != null && r.rarityColor != null ? r.rarityColor : EnumRarity.COMMON.rarityColor) + tank.getFluid().getLocalizedName());
         }
-        tooltips.add(I18n.format("fluids.info", tank.getFluidAmount(), tank.getCapacity()));
+        else tooltips.add(I18n.format("fluids.info", tank.getFluidAmount(), tank.getCapacity()));
     }
 }
 

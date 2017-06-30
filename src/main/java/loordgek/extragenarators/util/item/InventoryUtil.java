@@ -1,7 +1,10 @@
 package loordgek.extragenarators.util.item;
 
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.ArrayList;
@@ -15,6 +18,7 @@ public class InventoryUtil {
         }
         return stacks;
     }
+
     public static boolean hasItemHanderItems(IItemHandler itemHandler) {
         boolean[] array = new boolean[itemHandler.getSlots()];
         for (int i = 0; i < itemHandler.getSlots(); i++) {
@@ -28,6 +32,14 @@ public class InventoryUtil {
         }
         return false;
     }
+
+    public static void dropInv(World world, ItemStack[] stackList, BlockPos pos) {
+        for (ItemStack stack : stackList) {
+            if (stack != null)
+                world.spawnEntityInWorld(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), stack));
+        }
+    }
+
     /*
     public static boolean removeSets(IInventory inventory, int count, ItemStack[] set, boolean oreDictionary, boolean doRemove) {
         ItemStack[] stock = getStacks(inventory);
@@ -82,31 +94,31 @@ public class InventoryUtil {
         return null;
     }*/
     public static ItemStack[] condenseStacks(ItemStack[] stacks) {
-    List<ItemStack> condensed = new ArrayList<ItemStack>();
+        List<ItemStack> condensed = new ArrayList<ItemStack>();
 
-    for (ItemStack stack : stacks) {
-        if (stack == null) {
-            continue;
-        }
-        if (stack.stackSize <= 0) {
-            continue;
-        }
+        for (ItemStack stack : stacks) {
+            if (stack == null) {
+                continue;
+            }
+            if (stack.stackSize <= 0) {
+                continue;
+            }
 
-        boolean matched = false;
-        for (ItemStack cached : condensed) {
-            if (cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack)) {
-                cached.stackSize += stack.stackSize;
-                matched = true;
+            boolean matched = false;
+            for (ItemStack cached : condensed) {
+                if (cached.isItemEqual(stack) && ItemStack.areItemStackTagsEqual(cached, stack)) {
+                    cached.stackSize += stack.stackSize;
+                    matched = true;
+                }
+            }
+
+            if (!matched) {
+                ItemStack cached = stack.copy();
+                condensed.add(cached);
             }
         }
 
-        if (!matched) {
-            ItemStack cached = stack.copy();
-            condensed.add(cached);
-        }
-    }
-
-    return condensed.toArray(new ItemStack[condensed.size()]);
+        return condensed.toArray(new ItemStack[condensed.size()]);
     }
 
     public static int containsSets(ItemStack[] set, ItemStack[] stock, boolean oreDictionary) {
@@ -136,14 +148,14 @@ public class InventoryUtil {
 
         return totalSets;
     }
+
     public static boolean IsItemStackEqual(ItemStack stack1, ItemStack stack2) {
         return !(stack1 == null || stack2 == null) && stack1.isItemEqual(stack2) && stack1.getTagCompound() == stack2.getTagCompound();
 
     }
 
 
-    public static boolean isBucket(ItemStack stack)
-    {
+    public static boolean isBucket(ItemStack stack) {
         return stack != null && stack.getItem() != null && stack.getItem() == Items.BUCKET;
     }
 }
