@@ -1,8 +1,9 @@
 package loordgek.extragenarators.enums;
 
+import loordgek.extragenarators.util.IMeteLookUp;
 import net.minecraft.util.IStringSerializable;
 
-public enum EnumGenarator implements IStringSerializable {
+public enum EnumGenarator implements IStringSerializable, IMeteLookUp {
     furnace("furnace", 0),
     lava("lava",1),
     //ender("ender",2),
@@ -24,7 +25,7 @@ public enum EnumGenarator implements IStringSerializable {
         this.meta = meta;
     }
 
-    public static int getlength(){
+    public static int getLength(){
         return EnumGenarator.values().length;
     }
 

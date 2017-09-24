@@ -4,9 +4,9 @@ import loordgek.extragenarators.client.gui.widgets.WidgetBase;
 import loordgek.extragenarators.util.MathUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -74,7 +74,7 @@ public class RenderUtils {
                 double maxV = sprite.getMaxV();
 
                 Tessellator tessellator = Tessellator.getInstance();
-                VertexBuffer tes = tessellator.getBuffer();
+                BufferBuilder tes = tessellator.getBuffer();
                 tes.begin(7, DefaultVertexFormats.POSITION_TEX);
                 tes.pos(drawX, drawY + drawHeight, 0).tex(minU, minV + (maxV - minV) * drawHeight / 16F).endVertex();
                 tes.pos(drawX + drawWidth, drawY + drawHeight, 0).tex(minU + (maxU - minU) * drawWidth / 16F, minV + (maxV - minV) * drawHeight / 16F).endVertex();
@@ -137,7 +137,7 @@ public class RenderUtils {
         double drawup = Drawgui.UP == drawgui ? current : 0;
         double drawright = Drawgui.RIGHT == drawgui ? current : 0;
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexbuffer = tessellator.getBuffer();
+        BufferBuilder vertexbuffer = tessellator.getBuffer();
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
         vertexbuffer.pos((double) x + drawright, y + height, 0.0D).tex((u + drawright) * f, (v + (float) height) * f1).endVertex();
         vertexbuffer.pos(x + width, y + height, 0.0D).tex((u + (float) width) * f, (v + (float) height) * f1).endVertex();

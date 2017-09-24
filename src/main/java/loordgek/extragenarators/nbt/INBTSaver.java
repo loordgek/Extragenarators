@@ -14,9 +14,9 @@ public interface INBTSaver {
 
     void setFieldList(List<Field> fieldList);
 
-    default NBTTagCompound toNBT(NBTTagCompound compound){
+    default NBTTagCompound toNBT(NBTTagCompound compound) {
 
-        if (getFieldList() == null){
+        if (getFieldList() == null) {
             setFieldList(JavaUtil.GetFields(getNBTClass(), NBTSave.class));
         }
         try {
@@ -26,11 +26,11 @@ public interface INBTSaver {
         }
         return compound;
     }
-    default void fromNBT(NBTTagCompound compound){
-        if (getFieldList() == null){
+
+    default void fromNBT(NBTTagCompound compound) {
+        if (getFieldList() == null) {
             setFieldList(JavaUtil.GetFields(getNBTClass(), NBTSave.class));
         }
-        LogHelper.info(compound);
         try {
             NBTSaveUtil.getFieldsRead(getNBTClass(), compound.getCompoundTag(NBTKey));
         } catch (IllegalAccessException e) {
@@ -42,7 +42,7 @@ public interface INBTSaver {
         }
     }
 
-    default Object getNBTClass(){
+    default Object getNBTClass() {
         return this;
     }
 }

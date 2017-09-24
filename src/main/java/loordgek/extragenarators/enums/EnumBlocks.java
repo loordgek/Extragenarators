@@ -1,14 +1,13 @@
 package loordgek.extragenarators.enums;
 
-import loordgek.extragenarators.Extragenarators;
 import loordgek.extragenarators.blocks.Blocks;
 import loordgek.extragenarators.ref.Reference;
 import loordgek.extragenarators.util.IVariantLookup;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
+
 
 public enum EnumBlocks {
     FURNACEGENBLOCK(Blocks.GEN, Blocks.GenITEM, "genaratorbase", Blocks.GEN);
@@ -40,10 +39,8 @@ public enum EnumBlocks {
     }
 
     public void RegisterRender() {
-        for (int i = 0; i < lookup.variantnames().length; i++) {
-            ModelResourceLocation modelResourceLocation = new ModelResourceLocation(Reference.RESOURCE.RESOURCE_PREFIX + name, lookup.variantnames()[i]);
-            Extragenarators.proxy.setCustomModelResourceLocationitem(itemBlock, i, modelResourceLocation);
-        }
+        lookup.RegisterRender();
+
     }
 
     public Block getBlock() {

@@ -1,7 +1,7 @@
 package loordgek.extragenarators.tile;
 
 import loordgek.extragenarators.nbt.NBTSave;
-import loordgek.extragenarators.util.item.InventorySimpleItemHandler;
+import loordgek.extragenarators.util.item.SimpleItemHandler;
 import loordgek.extragenarators.util.item.InventoryUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -12,7 +12,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 public class TileFurnaceGen extends TileGenBase{
 
     @NBTSave
-    public InventorySimpleItemHandler fuelSlot = new InventorySimpleItemHandler(64, 1, "FuelSlot", this){
+    public SimpleItemHandler fuelSlot = new SimpleItemHandler(64, 1, this){
         @Override
         public boolean isStackValidForSlot(int Slot, ItemStack stack) {
             return TileEntityFurnace.isItemFuel(stack);
@@ -32,7 +32,7 @@ public class TileFurnaceGen extends TileGenBase{
         return super.getCapability(capability, facing);
     }
 
-    protected ItemStack getStack() {
+    private ItemStack getStack() {
         return fuelSlot.getStackInSlot(0);
     }
 
@@ -41,10 +41,10 @@ public class TileFurnaceGen extends TileGenBase{
         if (HasEnergy()) sendEnergy();
         if (!IsRunning()) {
             isburing = false;
-            if (getStack() != null) {
+            if (!getStack().isEmpty()) {
                 if (HasRoomForEnergy()) {
                     if (TileEntityFurnace.isItemFuel(getStack())) {
-                        maxmultiplier = fuelSlot.extractItem(0, upgrademultiplier, true).stackSize;
+                        maxmultiplier = fuelSlot.extractItem(0, upgrademultiplier, true).getCount();
                         runspeed = upgradespeed / maxmultiplier;
                         fire.setFiremax(TileEntityFurnace.getItemBurnTime(getStack()) * maxmultiplier);
                         fire.setFirecurrent(TileEntityFurnace.getItemBurnTime(getStack()) * maxmultiplier);
@@ -60,7 +60,7 @@ public class TileFurnaceGen extends TileGenBase{
     @Override
     public void breakBlock() {
         super.breakBlock();
-        InventoryUtil.dropInv(worldObj, InventoryUtil.getStacks(fuelSlot), pos);
+        InventoryUtil.dropInv(world, fuelSlot, pos);
     }
 
     @Override

@@ -45,7 +45,7 @@ public class LogHelper {
     }
 
     public static void logItemstack(ItemStack stack){
-        info(stack.getItem().getUnlocalizedName() + " stackSize " + stack.stackSize + " Metadata " + stack.getMetadata() + " NBT " + stack.getTagCompound());
+        info(stack.getItem().getUnlocalizedName() + " stackSize " + stack.getCount() + " Metadata " + stack.getMetadata() + " NBT " + stack.getTagCompound());
     }
 
     public static void logEnergyStorage(IEnergyStorage energyStorage){

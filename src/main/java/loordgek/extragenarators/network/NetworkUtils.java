@@ -40,7 +40,7 @@ public class NetworkUtils {
         return syncedFields;
     }
 
-    private static List<SyncField> getSyncFieldsForField(Field field, Object owner, Class searchedAnnotation) {
+    private static<T extends Annotation> List<SyncField> getSyncFieldsForField(Field field, Object owner, Class<T> searchedAnnotation) {
         boolean isLazy = field.getAnnotation(LazySync.class) != null;
         List<SyncField> syncedFields = new ArrayList<>();
         SyncField syncedField = getSyncFieldForField(field, owner);

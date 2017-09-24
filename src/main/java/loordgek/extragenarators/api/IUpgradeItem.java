@@ -2,8 +2,10 @@ package loordgek.extragenarators.api;
 
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nonnull;
+
 public interface IUpgradeItem {
-    int getspeedboost(ItemStack stack);
-    int getpowerstoreboost(ItemStack stack);
-    int getmultiplierboost(ItemStack stack);
+    int getspeedboost(@Nonnull ItemStack stack);
+    int getpowerstoreboost(@Nonnull ItemStack stack);
+    int getmultiplierboost(@Nonnull ItemStack stack);
 }

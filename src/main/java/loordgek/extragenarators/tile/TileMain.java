@@ -3,6 +3,7 @@ package loordgek.extragenarators.tile;
 import loordgek.extragenarators.container.container.IContainerGuiSync;
 import loordgek.extragenarators.nbt.INBTSaver;
 import loordgek.extragenarators.util.LogHelper;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -45,12 +46,12 @@ public class TileMain extends TileEntity implements ITickable, IContainerGuiSync
         timer++;
         if (timer == 40) {
             timer = 0;
-            if (!worldObj.isRemote){
+            if (!world.isRemote){
                 update2secSeverSide();
             }
             else update2secClientSide();
         }
-        if (!worldObj.isRemote) {
+        if (!world.isRemote) {
             updateServerSide();
         }
         else updateClientSide();
@@ -66,6 +67,8 @@ public class TileMain extends TileEntity implements ITickable, IContainerGuiSync
     protected void update2secClientSide() {}
 
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack){}
+
+    public void neighborChanged(BlockPos fromPos, Block oldBlock, IBlockState newState){}
 
     public void onNeighborChange(BlockPos neighbor) {}
 

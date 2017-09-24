@@ -1,14 +1,13 @@
 package loordgek.extragenarators.util.item;
 
 
-public class UpgradeInv extends InventorySimpleItemHandler implements IUpdateItemHander {
-    public UpgradeInv(int stacksize, int invsize, String name, IInventoryOnwer onwer) {
-        super(stacksize, invsize, name, onwer);
+public class UpgradeInv extends SimpleItemHandler{
+    public UpgradeInv(int stacksize, int invsize, IInventoryOwner onwer) {
+        super(stacksize, invsize, onwer);
     }
 
     @Override
-    public void UpdateItemHandler() {
-        getOnwer().updateItemHandler();
-
+    public void onSlotChanged() {
+        getOwner().updateItemHandler();
     }
 }

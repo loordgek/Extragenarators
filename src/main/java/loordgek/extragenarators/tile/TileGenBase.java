@@ -1,5 +1,6 @@
 package loordgek.extragenarators.tile;
 
+import loordgek.extragenarators.api.IUpgradeItem;
 import loordgek.extragenarators.enums.EnumInvFlow;
 import loordgek.extragenarators.nbt.NBTSave;
 import loordgek.extragenarators.network.GuiSync;
@@ -8,9 +9,11 @@ import loordgek.extragenarators.util.FacingUtil;
 import loordgek.extragenarators.util.Fire;
 import loordgek.extragenarators.util.ForgePower;
 import loordgek.extragenarators.util.UpgradeUtil;
-import loordgek.extragenarators.util.item.IInventoryOnwer;
+import loordgek.extragenarators.util.item.IInventoryOwner;
 import loordgek.extragenarators.util.item.InventoryUtil;
 import loordgek.extragenarators.util.item.UpgradeInv;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -19,12 +22,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TileGenBase extends TileMain implements IInventoryOnwer {
+public class TileGenBase extends TileMain implements IInventoryOwner {
     @GuiSync
     public int upgrademultiplier;
     @NBTSave
@@ -43,9 +48,14 @@ public class TileGenBase extends TileMain implements IInventoryOnwer {
     @NBTSave
     @GuiSyncInnerFields
     public ForgePower power = new ForgePower(50000);
-    private final Map<BlockPos, IEnergyStorage> energyStorageMap = new HashMap<>();
+    private final Map<EnumFacing, TileEntity> entityEnumFacingMap = new HashMap<>();
     @NBTSave
-    public UpgradeInv upgradeinv = new UpgradeInv(64, 8, "upgrade", this);
+    public UpgradeInv upgradeinv = new UpgradeInv(64, 8, this){
+        @Override
+        public boolean isStackValidForSlot(int Slot, ItemStack stack) {
+            return !stack.isEmpty() && stack.getItem() instanceof IUpgradeItem;
+        }
+    };
 
     protected void ReCalculateUpgrade() {
         upgrademultiplier = UpgradeUtil.getMultiplierBoost(InventoryUtil.getStacks(upgradeinv));
@@ -66,12 +76,12 @@ public class TileGenBase extends TileMain implements IInventoryOnwer {
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
         return capability == CapabilityEnergy.ENERGY || super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityEnergy.ENERGY) {
             return CapabilityEnergy.ENERGY.cast(power);
         }
@@ -79,38 +89,43 @@ public class TileGenBase extends TileMain implements IInventoryOnwer {
     }
 
     @Override
-    public void OnInventoryChanged(ItemStack stack, int slot, String name, EnumInvFlow flow) {
+    public void neighborChanged(BlockPos fromPos, Block oldBlock, IBlockState newState) {
+        scanNeighborForTileEntity(fromPos);
     }
 
-    @Override
-    public void onNeighborChange(BlockPos neighbor) {
-        scanNeighborForEnergy(neighbor);
-    }
-
-    private void scanNeighborForEnergy(BlockPos neighbor) {
-        if (worldObj.isRemote) return;
+    private void scanNeighborForTileEntity(BlockPos neighbor) {
+        if (world.isRemote) return;
         EnumFacing facing = FacingUtil.getFacingFromPos(pos, neighbor);
 
-        TileEntity tileEntity = worldObj.getTileEntity(neighbor);
-        if (tileEntity == null) return;
-        if (!tileEntity.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) return;
-        IEnergyStorage energyStorage = tileEntity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
-        if (energyStorageMap.containsKey(neighbor) && !(energyStorageMap.get(neighbor) == energyStorage)) {
-            energyStorageMap.remove(neighbor);
-        } else if (energyStorage.canReceive() && (!energyStorageMap.containsKey(neighbor))) {
-            energyStorageMap.put(neighbor, energyStorage);
+        TileEntity tileEntity = world.getTileEntity(neighbor);
+        if (tileEntity == null){
+            if (entityEnumFacingMap.containsKey(facing)){
+                entityEnumFacingMap.remove(tileEntity);
+            }
+        }
+        else {
+            if (!entityEnumFacingMap.containsKey(facing) || !(entityEnumFacingMap.get(facing) == tileEntity)){
+                entityEnumFacingMap.put(facing, tileEntity);            }
         }
     }
 
     protected void sendEnergy() {
-        for (IEnergyStorage energyStorage : energyStorageMap.values()) {
-            energyStorage.receiveEnergy(power.extractEnergyInternal(100000 / energyStorageMap.size(), false), false);
+        for (Map.Entry<EnumFacing, TileEntity> entry : entityEnumFacingMap.entrySet()){
+           if (entry.getValue().hasCapability(CapabilityEnergy.ENERGY, entry.getKey().getOpposite())){
+              IEnergyStorage energyStorage = entry.getValue().getCapability(CapabilityEnergy.ENERGY, entry.getKey().getOpposite());
+              if (energyStorage.canReceive()) energyStorage.receiveEnergy(50000, false);
+           }
         }
     }
 
     @Override
+    public void OnInventoryChanged(ItemStack stack, int slot, IItemHandler itemHandler, EnumInvFlow flow) {
+
+    }
+
+    @Override
     public void updateItemHandler() {
-        if (!worldObj.isRemote) {
+        if (!world.isRemote) {
             ReCalculateUpgrade();
         }
     }
@@ -132,19 +147,19 @@ public class TileGenBase extends TileMain implements IInventoryOnwer {
     protected void firstTick() {
         ReCalculateUpgrade();
         for (EnumFacing facing : EnumFacing.VALUES) {
-            scanNeighborForEnergy(pos.offset(facing));
+            scanNeighborForTileEntity(pos.offset(facing));
         }
     }
 
     @Override
     public void breakBlock() {
-        InventoryUtil.dropInv(worldObj, InventoryUtil.getStacks(upgradeinv), pos);
+        InventoryUtil.dropInv(world, upgradeinv, pos);
     }
 
     @Nullable
     @Override
     public World getWord() {
-        return worldObj;
+        return world;
     }
 
     @Nullable

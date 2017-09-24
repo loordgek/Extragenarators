@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public interface IInventoryOnwer{
+public interface IInventoryOwner {
     void OnInventoryChanged(ItemStack stack, int slot, String name, EnumInvFlow flow);
     void markDirty();
     void updateItemHandler();

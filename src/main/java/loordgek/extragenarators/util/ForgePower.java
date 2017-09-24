@@ -64,7 +64,7 @@ public class ForgePower implements IEnergyStorage, INBTSerializable<NBTTagCompou
         float energyReceived = Math.min(capacity - Floatenergy, Math.min(this.maxReceive, maxReceive));
         if (!simulate) {
             Floatenergy += energyReceived;
-            int floor_float = MathHelper.floor_float(Floatenergy);
+            int floor_float = MathHelper.floor(Floatenergy);
             receiveEnergyInternal(floor_float, false);
             Floatenergy -= floor_float;
         }

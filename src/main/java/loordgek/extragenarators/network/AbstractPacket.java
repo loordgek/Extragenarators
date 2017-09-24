@@ -16,12 +16,12 @@ public abstract class AbstractPacket <REQ extends IThreadSafeMessage> implements
     @Override
     public  REQ onMessage(REQ message, MessageContext ctx) {
         if(ctx.side == Side.SERVER) {
-            EntityPlayer player = ctx.getServerHandler().playerEntity;
+            EntityPlayer player = ctx.getServerHandler().player;
             if (message.isThreadSafe()){
                 handleServerSide(message, player, true);
             }
             else {
-                IThreadListener serverside = (WorldServer)player.worldObj;
+                IThreadListener serverside = (WorldServer)player.world;
                 serverside.addScheduledTask(() -> handleServerSide(message, player, false));
             }
         } else {

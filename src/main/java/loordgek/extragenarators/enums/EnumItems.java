@@ -4,7 +4,8 @@ import loordgek.extragenarators.items.Items;
 import loordgek.extragenarators.ref.Reference;
 import loordgek.extragenarators.util.IVariantLookup;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.common.registry.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
+
 
 public enum EnumItems {
     ITEMUPGRADE(Items.itemupgrade, "upgrade", Items.itemupgrade);
@@ -25,7 +26,7 @@ public enum EnumItems {
     }
 
     public void RegisterRender()  {
-        lookup.RegisterRender(name);
+        lookup.RegisterRender();
     }
 
     public Item getItem() {

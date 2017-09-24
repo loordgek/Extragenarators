@@ -1,15 +1,8 @@
 package loordgek.extragenarators.init;
 
-import loordgek.extragenarators.enums.EnumBlocks;
-import loordgek.extragenarators.enums.EnumItems;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-
 public class InitRecipe {
 
-    public static void RegisterRecipe(){
+/*    public static void RegisterRecipe(){
         GameRegistry.addShapedRecipe(new ItemStack(EnumItems.ITEMUPGRADE.getItem(), 1, 0)," R ", "GIG"," R ", 'R' ,Items.REDSTONE, 'G', Items.GLOWSTONE_DUST, 'I', Items.IRON_INGOT);
         GameRegistry.addShapedRecipe(new ItemStack(EnumItems.ITEMUPGRADE.getItem(), 1, 1)," R ", "GIG"," R ", 'R' ,Items.REDSTONE, 'G', new ItemStack(EnumItems.ITEMUPGRADE.getItem(), 1, 0), 'I', Items.IRON_INGOT);
         GameRegistry.addShapedRecipe(new ItemStack(EnumItems.ITEMUPGRADE.getItem(), 1, 2)," R ", "GIG"," R ", 'R' ,Items.REDSTONE, 'G', new ItemStack(EnumItems.ITEMUPGRADE.getItem(), 1, 1), 'I', Items.IRON_INGOT);
@@ -25,5 +18,5 @@ public class InitRecipe {
 
         GameRegistry.addShapedRecipe(new ItemStack(EnumBlocks.FURNACEGENBLOCK.getBlock(), 1,0), "III", "ÏGI", "RFR", 'R', Items.REDSTONE, 'I', Items.IRON_INGOT, 'G', Items.GOLD_INGOT, 'F', Blocks.FURNACE);
         GameRegistry.addShapedRecipe(new ItemStack(EnumBlocks.FURNACEGENBLOCK.getBlock(), 1,1), "III", "ÏBI", "RFR", 'R', Items.REDSTONE, 'I', Items.IRON_INGOT, 'B', Items.BUCKET, 'F', Blocks.FURNACE);
-    }
+    }*/
 }

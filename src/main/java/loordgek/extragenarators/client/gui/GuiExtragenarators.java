@@ -43,7 +43,7 @@ public class GuiExtragenarators<TE extends TileEntity> extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY){
-        fontRendererObj.drawString(name, 8, 6, 4210752);
+        fontRenderer.drawString(name, 8, 6, 4210752);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class GuiExtragenarators<TE extends TileEntity> extends GuiContainer {
                 String[] lines = WordUtils.wrap(line, 30).split(System.getProperty("line.separator"));
                 Collections.addAll(finalLines, lines);
             }
-            drawHoveringText(finalLines, x, y, fontRendererObj);
+            drawHoveringText(finalLines, x, y, fontRenderer);
         }
     }
 

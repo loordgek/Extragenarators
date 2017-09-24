@@ -2,15 +2,15 @@ package loordgek.extragenarators.event;
 
 import loordgek.extragenarators.enums.EnumBlocks;
 import loordgek.extragenarators.enums.EnumItems;
-import loordgek.extragenarators.util.LogHelper;
+import loordgek.extragenarators.ref.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@Mod.EventBusSubscriber
-public class CommenEventHandler {
+@Mod.EventBusSubscriber(modid = Reference.MODINFO.MOD_ID)
+public class CommonEventHandler {
     @SubscribeEvent
     public static void onRegistryRegisterBlocks(RegistryEvent.Register<Block> event) {
         for (EnumBlocks enumBlocks : EnumBlocks.values()) {
@@ -20,7 +20,6 @@ public class CommenEventHandler {
 
     @SubscribeEvent
     public static void onRegistryRegisterItems(RegistryEvent.Register<Item> event) {
-        LogHelper.info(event);
         for (EnumBlocks enumBlocks : EnumBlocks.values()) {
             enumBlocks.RegisterItemBlock(event.getRegistry());
         }

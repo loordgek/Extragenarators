@@ -5,15 +5,12 @@ import loordgek.extragenarators.api.IUpgradeItem;
 import loordgek.extragenarators.enums.EnumUpgrade;
 import loordgek.extragenarators.ref.Reference;
 import loordgek.extragenarators.util.IVariantLookup;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 public class ItemUpgrade extends ItemMain implements IUpgradeItem, IVariantLookup {
     public ItemUpgrade() {
@@ -63,22 +60,30 @@ public class ItemUpgrade extends ItemMain implements IUpgradeItem, IVariantLooku
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return String.format("item.%s%s.%s", Reference.RESOURCE.RESOURCE_PREFIX, Reference.ITEMS.upgrade, Reference.ITEMS.typeupgrade[MathHelper.clamp_int(stack.getItemDamage(), 0, Reference.ITEMS.typeupgrade.length - 1)]);
+        return String.format("item.%s%s.%s", Reference.RESOURCE.RESOURCE_PREFIX, Reference.ITEMS.upgrade, Reference.ITEMS.typeupgrade[MathHelper.clamp(stack.getItemDamage(), 0, Reference.ITEMS.typeupgrade.length - 1)]);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+    public void getSubItems( CreativeTabs tab, NonNullList<ItemStack> subItems) {
         for (EnumUpgrade enumUpgrade : EnumUpgrade.values()) {
             subItems.add(new ItemStack(this, 1, enumUpgrade.getMeta()));
         }
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
-    public void RegisterRender(String name) {
-        for (EnumUpgrade enumUpgrade : EnumUpgrade.values()) {
-            ModelResourceLocation modelResourceLocation = new ModelResourceLocation(this.getRegistryName().toString() + "_" + enumUpgrade.getName(), "inventory");
-            Extragenarators.proxy.setCustomModelResourceLocationitem(this, enumUpgrade.getMeta(), modelResourceLocation);
+    public void RegisterRender() {
+        Extragenarators.proxy.getModelManager().registerVariantItemModels(this, "variant", EnumUpgrade.values());
+        Extragenarators.proxy.getModelManager().registerItemModel(this);
+    }
+
+    @Override
+    public String[] variantnames() {
+        String[] strings = new String[EnumUpgrade.values().length];
+        for (EnumUpgrade enumUpgrade : EnumUpgrade.values()){
+            strings[enumUpgrade.getMeta()] = enumUpgrade.getName();
         }
+        return strings;
     }
 }

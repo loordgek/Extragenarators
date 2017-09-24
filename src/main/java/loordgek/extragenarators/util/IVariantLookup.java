@@ -4,5 +4,5 @@ public interface IVariantLookup {
   default String[] variantnames(){
       return new String[]{"inventory"};
   }
-    void RegisterRender(String name);
+    void RegisterRender();
 }

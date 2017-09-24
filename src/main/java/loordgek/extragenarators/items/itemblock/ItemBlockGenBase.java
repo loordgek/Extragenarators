@@ -15,7 +15,7 @@ public class ItemBlockGenBase extends ItemBlock {
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
-        return String.format("tile.%s%s.%s", Reference.RESOURCE.RESOURCE_PREFIX, Reference.BLOCKS.GENBASE, EnumGenarator.EnumLookup[MathHelper.clamp_int(stack.getItemDamage(), 0,EnumGenarator.getlength() - 1)]);
+        return String.format("tile.%s%s.%s", Reference.RESOURCE.RESOURCE_PREFIX, Reference.BLOCKS.GENBASE, EnumGenarator.EnumLookup[MathHelper.clamp(stack.getItemDamage(), 0, EnumGenarator.getLength() - 1)]);
     }
 
     @Override

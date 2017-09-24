@@ -122,7 +122,7 @@ public class NBTSaveUtil {
 
             if (object instanceof INBTSerializable) {
                 INBTSerializable serializable = ((INBTSerializable) object);
-                serializable.deserializeNBT(comp.getCompoundTag(field.getName()));
+                serializable.deserializeNBT(comp.getTag(field.getName()));
                 continue;
             }
             if (object instanceof FluidTank) {

@@ -1,9 +1,10 @@
 {
     "forge_marker": 1,
-    "defaults": {},
     "variants": {
-        "inventory": [{}],
         "genmeta": {
+            "inventory": {
+                "model": "cube_all"
+            },
             "furnace": {
                 "model":"extragenarators:coblegen"
             },

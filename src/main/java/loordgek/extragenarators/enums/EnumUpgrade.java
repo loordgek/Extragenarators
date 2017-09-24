@@ -1,6 +1,8 @@
 package loordgek.extragenarators.enums;
 
-public enum EnumUpgrade {
+import loordgek.extragenarators.util.IMeteLookUp;
+
+public enum EnumUpgrade implements IMeteLookUp {
 
     SPEED1("speedboost1"),
     SPEED2("speedboost2"),

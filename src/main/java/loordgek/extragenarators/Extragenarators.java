@@ -1,6 +1,5 @@
 package loordgek.extragenarators;
 
-import loordgek.extragenarators.init.InitRecipe;
 import loordgek.extragenarators.init.InitTile;
 import loordgek.extragenarators.network.NetworkHandler;
 import loordgek.extragenarators.proxy.IProxy;
@@ -8,7 +7,6 @@ import loordgek.extragenarators.ref.Reference;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
@@ -29,11 +27,5 @@ public class Extragenarators {
         InitTile.Init();
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHander());
         NetworkHandler.initNetwork();
-
-    }
-
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        InitRecipe.RegisterRecipe();
     }
 }

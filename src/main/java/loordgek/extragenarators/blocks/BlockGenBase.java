@@ -7,18 +7,20 @@ import loordgek.extragenarators.tile.TileFurnaceGen;
 import loordgek.extragenarators.tile.TileLavaGen;
 import loordgek.extragenarators.tile.TileMain;
 import loordgek.extragenarators.util.IVariantLookup;
+import loordgek.extragenarators.util.TileUtil;
+import net.minecraft.block.Block;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -26,12 +28,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
 
 @ParametersAreNonnullByDefault
 public class BlockGenBase extends BlockMain implements IVariantLookup {
@@ -81,8 +79,9 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
         tileMain.onNeighborChange(neighbor);
     }
 
+
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
             int meta = getMetaFromState(state);
             if (!playerIn.isSneaking()) {
@@ -91,7 +90,7 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
                         playerIn.openGui(Extragenarators.instance, GuiHander.GuiIDS.furnacegengui.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
                         break;
                     case 1: {
-                        if (playerIn.getHeldItem(hand) != null && playerIn.getHeldItem(hand).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+                        if (playerIn.getHeldItem(hand) != ItemStack.EMPTY && playerIn.getHeldItem(hand).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
                             IFluidHandler fluidHandlerheld = playerIn.getHeldItem(hand).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
                             IFluidHandler fluidHandler = (worldIn.getTileEntity(pos).getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null));
                             fluidHandler.fill(fluidHandlerheld.drain(FluidRegistry.getFluidStack("lava", 1000), true), true);
@@ -112,10 +111,9 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
         ((TileMain) tileEntity).onBlockPlacedBy(worldIn, pos, state, placer, stack);
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
-    public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-        for (int i = 0; i < EnumGenarator.getlength(); i++) {
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+        for (int i = 0; i < EnumGenarator.getLength(); i++) {
             list.add(new ItemStack(this, 1, i));
         }
     }
@@ -155,14 +153,28 @@ public class BlockGenBase extends BlockMain implements IVariantLookup {
 
     @Override
     public String[] variantnames() {
-        String[] strings = new String[EnumGenarator.getlength()];
-        for (int i = 0; i < EnumGenarator.getlength(); i++) {
+        String[] strings = new String[EnumGenarator.getLength()];
+        for (int i = 0; i < EnumGenarator.getLength(); i++) {
             strings[i] = EnumGenarator.byMeta(i).getName();
         }
         return strings;
     }
 
     @Override
-    public void RegisterRender(String name) {
+    public final void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+     neighborChanged(worldIn, pos, fromPos, state, blockIn, worldIn.getBlockState(fromPos));
+    }
+
+    protected void neighborChanged(World world, BlockPos fromPos, BlockPos thisPos, IBlockState thisState, Block oldBlock, IBlockState newState){
+        TileMain tileMain = TileUtil.getTileEntity(world, thisPos, TileMain.class);
+        if (tileMain != null){
+            tileMain.neighborChanged(fromPos, oldBlock, newState);
+        }
+    }
+
+    @Override
+    public void RegisterRender() {
+        Extragenarators.proxy.getModelManager().registerVariantBlockItemModels(this.getDefaultState(), genmeta);
+        Extragenarators.proxy.getModelManager().registerItemModel(Blocks.GenITEM);
     }
 }
