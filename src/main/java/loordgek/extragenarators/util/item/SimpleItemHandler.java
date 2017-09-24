@@ -1,6 +1,7 @@
 package loordgek.extragenarators.util.item;
 
 import loordgek.extragenarators.enums.EnumInvFlow;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -13,20 +14,17 @@ import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.Nonnull;
 
-public class InventorySimpleItemHandler implements IItemHandler, IItemHandlerModifiable, INBTSerializable<NBTTagCompound> {
-
+public class SimpleItemHandler implements IItemHandler ,IInvHolder ,IItemHandlerModifiable, INBTSerializable<NBTTagCompound> {
 
     private final int stacksize;
     private final int invsize;
-    private final String name;
-    private final IInventoryOwner onwer;
+    private final IInventoryOwner owner;
     private NonNullList<ItemStack> stacks;
 
-    public InventorySimpleItemHandler(int stacksize, int invsize, String name, IInventoryOwner onwer) {
+    public SimpleItemHandler(int stacksize, int invsize, IInventoryOwner owner) {
         this.stacksize = stacksize;
         this.invsize = invsize;
-        this.name = name;
-        this.onwer = onwer;
+        this.owner = owner;
         this.stacks = NonNullList.withSize(invsize, ItemStack.EMPTY);
     }
 
@@ -41,8 +39,43 @@ public class InventorySimpleItemHandler implements IItemHandler, IItemHandlerMod
         return stacks.get(slot);
     }
 
+    @Override
+    public int size() {
+        return getSlots();
+    }
+
+    @Override
+    public int StackLimit() {
+        return stacksize;
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack decrStackSize(int slot, int amount) {
+        {
+            ItemStack itemstack = ItemStackHelper.getAndSplit(this.stacks, slot, amount);
+
+            if (!itemstack.isEmpty())
+            {
+                this.owner.markDirty();
+            }
+
+            return itemstack;
+        }
+    }
+
+    @Override
+    public void putStackInSlot(@Nonnull ItemStack stack, int slot) {
+        stacks.set(slot, stack);
+    }
+
     public boolean isStackValidForSlot(int Slot, ItemStack stack) {
         return true;
+    }
+
+    @Override
+    public void onSlotChanged() {
+
     }
 
     @Override
@@ -78,7 +111,7 @@ public class InventorySimpleItemHandler implements IItemHandler, IItemHandlerMod
                 existing.grow(reachedLimit ? limit : stack.getCount());
             }
             ItemStack stack1 = reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : null;
-            onwer.OnInventoryChanged(stack1, slot, name, EnumInvFlow.INSERT);
+            owner.OnInventoryChanged(stack1, slot, this, EnumInvFlow.INSERT);
         }
 
         return reachedLimit ? ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - limit) : ItemStack.EMPTY;
@@ -100,14 +133,14 @@ public class InventorySimpleItemHandler implements IItemHandler, IItemHandlerMod
         if (existing.getCount() <= toExtract) {
             if (!simulate) {
                 stacks.set(slot, ItemStack.EMPTY);
-                onwer.OnInventoryChanged(existing, slot, name, EnumInvFlow.EXTRACT);
+                owner.OnInventoryChanged(existing, slot, this, EnumInvFlow.EXTRACT);
             }
             return existing;
         } else {
             if (!simulate) {
                 ItemStack stack = ItemHandlerHelper.copyStackWithSize(existing, existing.getCount() - toExtract);
                 stacks.set(slot, stack);
-                onwer.OnInventoryChanged(stack, slot, name, EnumInvFlow.EXTRACT);
+                owner.OnInventoryChanged(stack, slot, this, EnumInvFlow.EXTRACT);
             }
 
             return ItemHandlerHelper.copyStackWithSize(existing, toExtract);
@@ -147,16 +180,16 @@ public class InventorySimpleItemHandler implements IItemHandler, IItemHandlerMod
 
             }
         }
-        onwer.markDirty();
+        owner.markDirty();
     }
 
     @Override
     public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
         stacks.set(slot, stack);
-        onwer.markDirty();
+        owner.markDirty();
     }
 
     protected IInventoryOwner getOwner() {
-        return onwer;
+        return owner;
     }
 }

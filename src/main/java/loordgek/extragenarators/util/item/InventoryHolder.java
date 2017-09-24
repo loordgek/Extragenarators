@@ -5,10 +5,10 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class InventorySlotHandler implements ISlotHandler{
+public class InventoryHolder implements IInvHolder {
     private final IInventory inventory;
 
-    public InventorySlotHandler(IInventory inventory) {
+    public InventoryHolder(IInventory inventory) {
         this.inventory = inventory;
     }
 
@@ -42,5 +42,10 @@ public class InventorySlotHandler implements ISlotHandler{
     @Override
     public boolean isStackValidForSlot(int slot, ItemStack stack) {
         return inventory.isItemValidForSlot(slot, stack);
+    }
+
+    @Override
+    public void onSlotChanged() {
+
     }
 }
